@@ -1,0 +1,269 @@
+\documentclass[amsmath,amssymb,superscriptaddress,longbibliography,prb,twocolumn,floatfix]{revtex4-2}
+
+\usepackage{amsmath,amssymb}
+\usepackage[normalem]{ulem}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{graphicx} % In draft mode because if not compile takes too long because the figures are very big (>10+ MB)
+\hypersetup{
+    colorlinks=true,
+    urlcolor= blue,
+    citecolor=blue,
+    linkcolor= blue}
+
+% Code to add paragraph numbers and titles
+\definecolor{lightgray}{gray}{0.6}
+\newif\ifptitle
+\newif\ifpnumber
+\newcounter{para}
+\newcommand\ptitle[1]{\par\refstepcounter{para}
+{\ifpnumber{\noindent\textcolor{lightgray}{\textbf{\thepara}}\indent}\fi}
+{\ifptitle{\textbf{[{#1}]}}\fi}}
+\ptitletrue  % comment this line to hide paragraph titles
+\pnumbertrue  % comment this line to hide paragraph numbers
+
+\newcommand{\newtext}[1]{\textcolor{black}{#1}}
+\newcommand{\deltext}[1]{\sout{#1}}
+
+\newcommand{\Qmag}{\mathbf{Q}_{\mathrm{mag}}}
+\newcommand{\Qlat}{\mathbf{Q}_{\mathrm{lat}}}
+\newcommand{\Qa}{\mathbf{Q}_{\mathrm{a}}}
+\newcommand{\Qb}{\mathbf{Q}_{\mathrm{b}}}
+\newcommand{\Qta}{\mathbf{Q}_{\mathrm{2a}}}
+\newcommand{\Vs}{V_\mathrm{s}}
+\newcommand{\Is}{I_\mathrm{s}}
+\newcommand{\Vrms}{V_\mathrm{rms}}
+\newcommand{\EF}{E_F}
+
+\newcommand{\pppp}{(++++)}
+\newcommand{\pppm}{(+++$-$)}
+\newcommand{\ppmm}{(++$--$)}
+\newcommand{\pmpm}{(+$-$+$-$)}
+
+\newcommand{\hphys}{Department of Physics, Harvard University, Cambridge, Massachusetts 02138, USA}
+\newcommand{\heng}{School of Engineering \& Applied Sciences, Harvard University, Cambridge, Massachusetts 02138, USA}
+\newcommand{\ames}{Ames Laboratory, Iowa State University, Ames, Iowa 50011, USA}
+\newcommand{\iowa}{Department of Physics and Astronomy, Iowa State University, Ames, Iowa 50011, USA}
+\newcommand{\lanl}{Theoretical Division, Los Alamos National Laboratory, Los Alamos, New Mexico 87545, USA}
+\newcommand{\cin}{Center for Integrated Nanotechnology, Los Alamos National Laboratory, Los Alamos, New Mexico 87545, USA}
+\newcommand{\uzh}{University of Zurich}
+\begin{document}
+
+\title{Accelerate quasiparticle interference measurements with sparse sampling and drift correction }
+
+\author{Marcos Johnson-Noya}
+\affiliation{\hphys}
+\author{Yu Liu}
+\affiliation{\hphys}
+\author{Jens Oppliger}
+\affiliation{\hphys}
+\affiliation{\uzh}
+\author{Fabian Donat Natterer}
+\affiliation{\uzh}
+\author{Jennifer E. Hoffman}
+\email[]{jhoffman@physics.harvard.edu}
+\affiliation{\hphys}
+\affiliation{\heng}
+
+\date{\today}
+
+\begin{abstract}
+The band structure of quantum materials, such as cuprate superconductors or topological insulators, makes them good candidates for improving energy transmission. To understand these electronic structures, scientists rely on quasiparticle interference (QPI) imaging. QPI results from the interference of electron waves scattered by surface defects, and it is measured by mapping the local density of states (LDOS) via differential conductance \(dI/dV\) spectroscopy. These maps are then Fourier transformed to reveal the scattering wave vectors. However, mapping the LDOS on a fine resolution grid is very slow which can lead to drift of the scanning tunneling microscope (STM) tip. Here we show a new method for accelerating QPI acquisition by sparsely sampling the LDOS for compressed sensing reconstruction, while simultaneously mapping the surface topography. Although sparse sampling has been applied to QPI before (Nakanishi 2016, Oppliger 2020), previous implementations relied on the assumption that tip drift scales linearly with time. Our method does not rely on linear drift approximations, so it delivers better signal fidelity in situations when drift is not a linear function of time. Our method's improvements in speed will make QPI imaging more practical.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+\ptitle{Motivate importance of QPI imaging but demonstrate difficulty of acquiring QPI} Quasiparticle interference (QPI) is a useful tool for investigating the band structure of materials. QPI has nanometer spatial resolution and works in the presence of magnetic fields, making it advantageous compared to angle-resolved photoemission spectroscopy (ARPES) \cite{OppligerPRR2020}. QPI patterns are measured by spectroscopic scanning tunneling microscopy (STM), which maps the differential conductance \(dI/dV\) across the surface of a material as a function of tip position and energy, revealing interference patterns around atomic defects \cite{PirieNatPhys2020, LiuThesis2023}.
+However, acquiring large enough \(dI/dV\) maps can take days \cite{NakanishiOhnoJPSJ2016}, and thermal drift of the STM tip during these extended measurements degrades the QPI signal \cite{LiuThesis2023}.
+
+\ptitle{Motivate sparse sampling + compressed sensing as a solution to this problem} 
+Recent work has demonstrated that QPI measurements can be sped up by sparsely sampling the \(dI/dV\) maps \cite{NakanishiOhnoJPSJ2016, OppligerPRR2020, OppligerMethodsX2022}. We can reconstruct the QPI signal from a subset of the full \(dI/dV\) map via compressed sensing (CS). This is possible because the \(dI/dV\) maps are sparse in Fourier space, which lets us recover the signal despite sampling below the Nyquist rate \cite{CandesIEEE2006}. However, existing methods either neglect the effects of drift or assume it is linearly proportional with time, which limits these approach's effectiveness for long measurements where drift becomes nonlinear. Here, we develop an adaptive sparse sampling approach that corrects for nonlinear drift by simultaneously acquiring full-grid topographic scans alongside the sparsely measured \(dI/dV\) map. This new protocol makes it possible to reconstruct the QPI signal with a high signal to noise ratio even under challenging experimental conditions.
+
+\ptitle{Outline Paper}
+The remainder of this paper is organized as follows. In Section~II, we explain the compressed sensing method and why it is possible to reconstruct the full-grid \(dI/dV\) maps from sparsely sampled data. We also justify the choice of Basis Pursuit Denoising (BPDN) as the optimization scheme over alternatives such as LASSO (Fig.~\ref{fig:SS_overview}). We then describe our drift correction protocol, which uses simultaneously acquired full-grid topography maps to compute accurate drift phase maps without relying on linear drift approximations (Fig.~\ref{fig:drift_pedagogical}). Section~III details the experimental scanning protocol that enables concurrent acquisition of topography and sparse \(dI/dV\) data, ensuring that the two maps share an identical tip movement history and pixel registration (Fig.~\ref{fig:Methodology}). In Section~IV, we show that BPDN reconstruction recovers 75\% of the ground truth signal-to-noise ratio (SNR) from a 25\% sampling rate, and that applying our drift correction protocol further sharpens the QPI features in the recovered maps (Fig.~\ref{fig:Methodology}). We also present SNR comparisons across multiple materials, including a Kondo insulator, to establish the generalizability of our approach (Fig.~\ref{fig:SNR_vs_Sparsity}). And outperforms uniform sampling under certain conditions (TODO define which conditions these are). (Fig.~\ref{fig:ASS}). In Section~V, we contextualize our contributions relative to prior sparse sampling efforts and outline directions for future work, including the broader application of our methods to additional materials and the potential use of machine learning to optimize sampling distributions.
+
+\begin{figure}[h!]    \centering\includegraphics[width=\columnwidth]{figure1_SS_overview.pdf}
+    \caption{\textbf{Overview of Sparse Sampling.} (a) Topography of the measured area of Bi$_2$Sr$_2$CaCu$2$O${8+\delta}$. Scale bar: 8 nm. (b) Sparsely measured $dI/dV$ map at $-22$ mV with a 25\% sampling rate; unmeasured grid points are left as whitespace. (c) Reconstructed full-grid $250 \times 250$ map obtained from (b) using the BPDN algorithm. (d) Experimentally acquired full-grid $dI/dV$ map in the same area with the same tip, serving as the ground truth. All real-space maps (b–d) were acquired with setpoints $V_s = 100,\mathrm{mV}$, $I_s = 70,\mathrm{pA}$, and bias modulation $V*\mathrm{rms} = 1.77,\mathrm{mV}$. The sparsely sampled map required approximately 12 hours to complete, while the full-grid map required approximately 2.5 days. (e–h) Fourier transforms (FTs) of the maps in (a–d), respectively. For (f), the FT is computed from the sparsely measured map in (b) after filling unmeasured pixels with the mean value solely for visualization, thereby illustrating the effect of sparse sampling prior to reconstruction. The FTs reveal quasiparticle interference (QPI) scattering wavevectors and Bragg peaks corresponding to the BSCCO lattice. \cite{LiuThesis2023}}
+    \label{fig:SS_overview}
+\end{figure}
+
+\section{Main Text}
+
+\subsection{Compressed Sensing}
+
+\ptitle{Why QPI is a good fit for compressed sensing}
+QPI signal is inherently sparse in momentum space. This means we can sample at sub nyquist frequency \cite{CandesCommPure2006} and still recover the image. 
+
+\begin{equation}  
+    \min \|\mathbf{x}\|_{1} \text{ subject to } \|A\mathbf{x} - \mathbf{y}\|_{2} \leq \epsilon.  
+    \label{eq:BPDN}  
+\end{equation}
+
+\noindent Here, \(\mathbf{x} \in \mathbb{C}^n\) denotes the vector of complex Fourier coefficients of the $dI/dV$ map on the full \(250 \times 250\) grid, reshaped into a vector of length \(n = n_x n_y\). The measurement vector \(\mathbf{y} \in \mathbb{R}^m\) contains the experimentally acquired real-space $dI/dV$ values at the sampled spatial locations \(\Omega\), where \(m = |\Omega|\) is the number of measured pixels. The forward operator \(A : \mathbb{C}^n \to \mathbb{R}^m\) is defined as
+\[
+A = P_\Omega F^{-1},
+\]
+where \(F^{-1}\) is the unitary inverse discrete Fourier transform mapping Fourier coefficients to real space, and \(P_\Omega\) is the restriction operator that selects the entries corresponding to the sampled spatial indices \(\Omega\). Because the physical $dI/dV$ map is real-valued, the inverse Fourier transform of \(\mathbf{x}\) is constrained to be real. The parameter \(\epsilon\) controls the allowable data-fidelity error and reflects the estimated noise level in the QPI measurements.
+
+\ptitle{Briefly Discuss Optimization Scheme}
+[We justify the choice of BPDN over basis pursuit (BP) and LASSO, which are commonly used in the compressed sensing literature. BPDN is better suited for noisy experimental data because the \(\ell_2\) constraint allows for a controlled level of noise in the reconstruction, whereas BP assumes noiseless measurements and LASSO requires more precise hyperparameter tuning to achieve comparable performance. We defer a detailed comparison of optimization schemes to the appendix \cite{OppligerMethodsX2022}.]
+
+\ptitle{How we determine reconstruction quality}
+[We define two metrics for quantifying reconstruction quality. First, the signal-to-noise ratio (SNR) is computed by taking a linecut through the Fourier transform of the $dI/dV$ map and comparing the integrated intensity in a signal region (containing a QPI scattering vector) to the noise floor estimated from a featureless region of the same linecut (see Fig.~\ref{fig:SNR_illustration}). Second, the square residual quantifies the pixel-wise difference between the reconstructed and ground truth maps in Fourier space, after masking out Bragg peaks that would otherwise dominate the metric. Both metrics are described in detail in the appendix.]
+
+\subsection{Drift Correction}
+\ptitle{Introduction to the difficulty of drift correcting reconstructed maps}
+Previous work on Sparse Sampling QPI has not fully addressed how to do drift correction \cite{OppligerPRR2020, NakanishiOhnoJPSJ2016}. Obtaining the ground truth drift phase map cannot be achieved by simply taking a full-grid topography map before or after the sparsely sampled map. The reason is that even small drifts and varying piezoelectric histories can substantially alter the drift phase maps.
+
+\ptitle{How we address drift}
+In Fig.~\ref{fig:Methodology} we show how we simultaneously obtain topo maps and sparse \(dI/dV\) maps.
+
+
+
+
+\section{Methods}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\columnwidth]{drift_correction_results.pdf}
+    \caption{\textbf{Effect of drift correction on sparsely sampled $dI/dV$ maps.} (a) Reconstructed $dI/dV$ map at $-22\,\mathrm{mV}$ obtained from sparsely sampled measurements prior to drift correction. (b) The same map after applying drift correction, showing improved spatial coherence of the quasiparticle interference pattern. (c) Fourier transform (FT) of the reconstructed map in (a). (d) Fourier transform of the drift-corrected map in (b), where the QPI features appear sharper after correction.
+Setpoints: $V_s = 100\,\mathrm{mV}$, $I_s = 70\,\mathrm{pA}$, bias modulation $V_\mathrm{rms} = 1.77\,\mathrm{mV}$.}
+\label{fig:Methodology}
+\end{figure}
+
+\ptitle{Protocol: introduce how to obtain phase maps}
+As shown in Figure~\ref{fig:Methodology}, the entire map area is divided into a full grid with a specified resolution. The scanning tip moves line by line, recording data only along the dashed arrows. This path is chosen because it provides a smooth and uniform drift phase map. The height information at each grid point is saved in a topography map, which will later be used to compute the ground truth drift phase maps for correcting the reconstructed \(dI/dV\) maps. The red crosses indicate randomly or sparsely selected pixels at a given sampling rate. When the scanning tip reaches one of these red cross pixels, it pauses and acquires the \(dI/dV\) data at that location. The measured bias spectroscopy is saved in a sparsely sampled map. The key point is that the full-grid topography map has the exact same tip movement history and pixel registration as the sparsely sampled map, ensuring they share the same drift maps \cite{LiuThesis2023}.
+
+
+\ptitle{Example of how we obtain drift correction}
+
+In Figure~\ref{fig:Methodology} (b-e), we show examples of a simultaneously acquired sparsely sampled \(dI/dV\) map with a 25\% sampling rate and a full-grid topography map. To perform drift correction on the reconstructed map, we first compute the drift phase maps from the topography map.
+
+\ptitle{Reconstructing the sparsely measured map and applying drift correction}
+
+After obtaining the drift phase maps, we reconstruct the full-grid \(dI/dV\) map from the sparsely measured map. We use the BPDN algorithm with an \(L_2\) norm threshold of 0.01 for the image reconstruction, a value selected after performing a grid search to optimize reconstruction quality. Next, we apply drift correction to the reconstructed \(dI/dV\) map using the drift phase maps. The drift-corrected result is shown in Figure~\ref{fig:Methodology}(b,d), where the sharpened QPI features in the Fourier transform confirm successful drift correction.
+
+\subsection{Compressed Sensing Methods}
+
+\subsection{Adaptive Sparse Sampling}
+
+\ptitle{Introduction and Rationale to ASS}
+
+Adaptive sparse sampling (ASS) was introduced by Oppliger et al.\cite{OppligerMethodsX2022} as a method to optimize data acquisition by leveraging prior knowledge about the data's features. Unlike traditional uniform sampling strategies, which collect an equal density of points across the sample, ASS allocates higher sampling density to regions expected to contain more information, such as areas near Bragg peaks or impurities. This approach reduces the total measurement time and data volume while maintaining high-fidelity reconstructions of key features.
+
+\ptitle{Implementation of Adaptive Sampling}
+Our adaptive approach builds on a combination of uniform sampling and a feature-driven mask. We first acquire 5\% of the total grid points uniformly across the sample to retain a baseline coverage. To generate the feature-driven mask, we Fourier-filter the full-grid map around the known Bragg peak positions to isolate the lattice contribution, then inverse Fourier transform back to real space. In this filtered image, scattering centers (e.g., impurities) appear as local intensity variations, which we locate using an automated peak-finding routine. Around each identified scattering center, we define a Gaussian with amplitude and width proportional to its local intensity. These Gaussians collectively form a probability distribution from which a second 5\% of sampling points is drawn, concentrating measurements near the most relevant local structures. This yields a combined
+10\% sampling mask with both uniform and feature-driven coverage. See the appendix and Fig.~\ref{fig:ASS_pipeline} for more details.
+
+\ptitle{Results}
+To demonstrate the benefits, we compared uniform random sampling of 
+10\% of the pixels against an adaptive approach consisting of 
+5\% uniform plus 5\% feature-focused sampling. After reconstructing the data via an $\ell_1$-regularized compressed sensing solver, the adaptive sampling outperformed the uniform mask in capturing the local inhomogeneities and QPI signals of interest. Quantitative inspection in real space revealed reduced reconstruction error near impurities, while the Fourier transforms of the adaptively sampled images more faithfully retained the key wave vectors. Ultimately, these results show that guiding a fraction of the sampled points to important features can yield improvements in overall accuracy, especially for low sampling fractions.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\columnwidth]{figure3_ASS.pdf}
+    \caption{\textbf{Full-grid topography and sparsely sampled $dI/dV$ maps.}
+    (\textbf{a}) Full-grid topography map of a Kondo insulator.
+    (\textbf{d}) Fourier transform (FT) of the topography in (a).
+    (\textbf{b}) Topography from (a) with 10\% random sampling points overlaid in red.
+    (\textbf{e}) Recovered signal using only the 10\% random sample.
+    (\textbf{c}) Topography from (a) with 5\% random points plus 5\% adaptively sampled points overlaid.
+    (\textbf{f}) Reconstructed signal from (c), highlighting improved preservation of key features.
+    \label{fig:ASS}
+    }
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\columnwidth]{Drift_Correction_Pedagogical_Figure.pdf}
+    \caption{\textbf{Pedagogical illustration of drift correction.} (a) [Schematic showing how thermal drift of the STM tip during extended measurements distorts the pixel registration of the \(dI/dV\) map relative to the true atomic lattice, and how our simultaneous topography acquisition provides the drift history needed to correct this distortion.] (b) [Diagram illustrating that previous approaches assumed linear drift, whereas our method captures the full nonlinear drift trajectory by acquiring a complete topography map with the same tip path as the sparse \(dI/dV\) acquisition.] [Figure in preparation.]}
+    \label{fig:drift_pedagogical}
+\end{figure}
+
+
+
+\section{Discussion}
+\ptitle{Previous sparse sampling efforts in QPI.} Prior research has demonstrated the utility of sparse sampling to accelerate QPI \cite{NakanishiOhnoJPSJ2016, OppligerPRR2020, Oppliger2022}. Notably, strategies like using the traveling salesman problem to optimize STM tip trajectories have effectively minimized travel distances and thus measurement times \cite{OppligerPRR2020}. Additionally, an idea called adaptive sparse sampling has been used, which leverages the relatively quick reconstruction time of compressed sensing to dynamically determine the necessary number of measurements (sampling rate), ensuring the $dI/dV$ map attains predefined quality thresholds \cite{OppligerMethodsX2022}.
+
+\ptitle{What could be improved about these approaches: algorithm comparison.}
+Despite their contributions, the literature could be improved, particularly in the comparative analysis of optimization schemes used in compressed sensing. Some studies use LASSO \cite{NakanishiOhnoJPSJ2016} or BPDN \cite{OppligerPRR2020, OppligerMethodsX2022} for reconstructing sparsely sampled images. However, there is no comparison between these optimization schemes. Such a comparison could highlight strengths and limitations relevant for improving QPI methods.
+
+\ptitle{Improvements needed in drift correction techniques} While attempts to correct drift in recovered QPI maps have been made \cite{OppligerPRR2020, OppligerMethodsX2022}, the accuracy of these methods is compromised by small drifts and the varying histories of piezoelectric elements, which can alter the drift phase maps. Notably, the acquisition of our $dI/dV$ maps, primarily during single bias spectroscopy, requires approximately 3 seconds with an integration time of 4ms. Given this, the time reduction efforts using a traveling salesman algorithm for efficient tip traversal could be more effectively redirected towards enhancing drift correction mechanisms in our $dI/dV$ maps."
+
+\ptitle{Implications of our research} Our research improves the quality of sparse sampling methods for accelerating QPI through an new drift correction protocol. This protocol simplifies the STM tip's movement relative to previous methods, allowing for the concurrent acquisition of topography maps that facilitate more accurate drift correction of $dI/dV$ maps. Moreover, our exploration of optimal algorithms aims to develop a more robust optimization scheme, improving the reconstruction quality of sparsely sampled images.
+
+\ptitle{How our data is different}
+Unlike previous studies that relied solely on simulated data, our research utilizes actual sparsely sampled $dI/dV$ maps. This method not only validates the feasibility of sparse sampling in practical scenarios but also demonstrates the reliability of our findings by testing them under real experimental conditions.
+
+\ptitle{Limitations of our research and directions for future research: materials} With this in mind, we feel that it is important to acknowledge the limitations of our own research and how this may guide future directions for our research. Our current work is concentrated on the acquisition of a single material, Bi$_2$Sr$_2$CaCu$2$O${8+\delta}$ (BSCCO). While the findings with BSCCO are promising, they highlight the need for a broader application of our methods across various materials to ensure generalizability and robustness.
+
+\ptitle{Limitations of our research and directions for future research: adaptive sparse sampling/ML}
+The effectiveness of QPI largely depends on the sparsity and incoherence of the scattering signals. In practical applications, however, signals often originate from a limited number of defects, resulting in high coherence. To combat this, we propose adaptive sparse sampling, which involves: (i) creating a small, bias-tested map to predict QPI patterns; (ii) using an inverse Fourier transform to identify real-space contributions of scattering signals; and (iii) generating tailored random indices to intensify measurements around scattering centers (up to 80\%) and reduce them in less critical areas (down to 20\%). This method will hopefully enhance signal-to-noise ratios while maintaining resolution and reducing time (by ensuring a sufficient yet minimal sampling rate is used). Furthermore, we will consider using machine learning to optimize the distribution of these indices for precise scattering vector analysis based on preliminary maps \cite{LiuThesis2023}.
+
+\section{Results}
+
+\ptitle{Using BPDN as our optimization scheme, we can recover our sparse samples with high fidelity.} 
+We used Basis Pursuit Denoising (BPDN) as our optimization method because of its robust ability to balance low noise levels, minimize artifacts in the reconstructed images, and ensure effective signal recovery. Through systematic experimentation, we optimized the \( \ell_1 \) threshold hyperparameter \( \tau \) to achieve a 50\% signal-to-noise ratio (SNR) recovery of the ground truth using a sparsely sampled (\(25\%\) sampling rate) \(dI/dV\) map. Our results demonstrate that the BPDN method achieves minimal artifacts, indicating high-fidelity recovery of the sparsely sampled data.
+
+\ptitle{Capturing the full-grid topography map alongside the sparsely measured $dI/dV$ map allows us to obtain an accurate drifting field and improve the SNR of the recovered image.} Our new method that we've proposed involves the simultaneous acquisition of the full-grid topography map alongside the sparsely measured $dI/dV$ map. This approach makes use of the faster acquisition speed of the topography map in order to obtain an accurate drifting field, which is necessary for correcting lattice distortions that can otherwise obscure QPI signals. Using the phase maps computed from the full-grid topography map, we can drift-correct our reconstructed images.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\columnwidth]{SNR_Illustration.pdf}
+    \caption{\textbf{Illustration of how we calculate SNR}
+    (a) Fourier transform of the ground-truth dI/dV map at -22 mV, with the linecut direction (red dashed, 51.5 deg) and the two SNR integration regions overlaid: blue (noise floor) and red (signal). (b) Intensity profile along the linecut. The noise floor is estimated from the edge of the cut (blue, positions 0-30), and the signal SNR is computed from the signal region (red, positions 60-90).}
+    \label{fig:SNR_illustration}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\linewidth]{snr_vs_sparsity.pdf}
+    \caption{\textbf{SNR as a function of sampling rate.} Signal-to-noise ratio of the reconstructed $dI/dV$ map as a function of the sparse sampling rate for Bi$_2$Sr$_2$CaCu$_2$O$_{8+\delta}$ (BSCCO). [Additional curves for other materials, including a Kondo insulator (SmB$_6$), will be added to demonstrate generalizability.]}
+    \label{fig:SNR_vs_Sparsity}
+\end{figure}
+
+The effectiveness of our drift correction protocol is illustrated in Fig.~\ref{fig:Methodology}. The Fourier transform of the recovered \(dI/dV\) map before drift correction [Fig.~\ref{fig:Methodology}(c)] exhibits distinct Bragg peaks and QPI features. After applying drift correction [Fig.~\ref{fig:Methodology}(d)], the Bragg peaks become  sharper. The combination of BPDN reconstruction and our drift correction protocol achieves 75\% of the ground truth SNR, as evidenced by the reduced square residuals and improved SNR metrics (Fig.~\ref{fig:SNR_vs_Sparsity}). It may be possible to achieve such good results with even fewer points through adaptive sparse sampling.
+
+\section*{Acknowledgements}
+
+\ptitle{Gratitude Expression}
+Expressing thanks to all contributors and institutions that supported the research.
+
+\vspace{-2mm}
+\appendix
+\section{Additional Metrics}
+
+
+\ptitle{Explanation of the Square Residual as a Metric for Reconstruction Quality.} The square residual quantifies the difference between our reconstructed image and a reference image (typically the ground truth). In QPI measurements, the FT patterns consist of two components: non-dispersive structural signals, such as the Bragg peaks of the atomic lattice, and dispersive scattering signals from defects \cite{LiuThesis2023}. To compute the square residual, we first mask out the Bragg peaks corresponding to the atomic lattice in Fourier space. This step is necessary because the Bragg peaks would otherwise dominate the computed square residuals. Gaussian masks are applied with widths determined to cover all the Bragg peaks and any intensity leakage due to drift, while preserving the dispersive QPI signals. We then apply the same mask to the reconstructed map. The square residual is calculated as the sum of the squared differences between the masked reference and reconstructed maps \cite{LiuThesis2023}.
+
+\ptitle{Explanation of the SNR as metric for reconstruction quality.}
+As we mentioned before, another way to quantify the reconstruction quality is to compute the SNR of a specific scattering vector in the QPI. First, we take a linecut passing through the Bragg peaks along the diagonal direction in the FT of dI/dV map. Then we plot the linecuts along the same direction for the reconstructed map and ground truth.
+
+
+\ptitle{Comparison of BPDN and LASSO Performance}
+From Figures~\ref{fig:residuals} and~\ref{fig:comparison_ground_truth}, it is evident that both BPDN and LASSO algorithms perform effectively in reconstructing the \(dI/dV\) maps, achieving high signal-to-noise ratios and low square residuals. However, BPDN exhibits greater robustness by maintaining optimal reconstruction quality across a wider range of hyperparameter values, spanning orders of magnitude. In contrast, LASSO requires more precise tuning of its hyperparameters to achieve similar levels of performance. This inherent robustness makes BPDN a more reliable and versatile choice for our application, ensuring consistent results without the need for extensive hyperparameter optimization.
+\section{Adaptive Sparse Sampling}
+\ptitle{ASS Strategy}
+Adaptive sampling can be guided by identifying regions in real space where the signal is most likely to be informative, then concentrating measurements there. One practical approach, as demonstrated in our code, involves first applying an inverse Fourier transform filter to isolate features of interest—such as impurity-bound states or QPI peaks. We then locate local maxima (or “extrema”) within this filtered map using an automated peak-finding routine. Around each extremum, a Gaussian mask is defined with an amplitude proportional to its local intensity. These masks collectively form a probability distribution from which a second set of points is randomly drawn. Thus, while some fraction of points is still acquired uniformly to ensure overall coverage, the additional points are preferentially placed near the most relevant local structures. By leveraging these Gaussian-weighted picks, we maximize our sampling efficiency where it matters most, allowing a larger fraction of the physically important features to be captured at a fraction of the total acquisition cost.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\columnwidth]{figure_ASS_pipeline.pdf}
+    \caption{\textbf{Adaptive sparse sampling pipeline (simulation).}
+    (\textbf{a}) Full-grid $dI/dV$ map used as a stand-in for topography in this simulation.
+    (\textbf{b}) Fourier transform of (a) with Bragg peak positions circled in red.
+    (\textbf{c}) Real-space map obtained by inverse Fourier transforming only the Bragg peak regions, isolating the lattice contribution.
+    (\textbf{d}) Local maxima (red crosses) identified in the filtered map, corresponding to impurity or scattering center locations.
+    (\textbf{e}) Gaussian probability mask constructed from the impurity locations in (d), with amplitude and width proportional to local intensity.
+    (\textbf{f}) Combined 10\% sampling mask: 5\% uniform random points (blue) provide baseline coverage, while 5\% adaptive points (red) are drawn from the probability mask in (e), concentrating measurements near scattering centers.}
+    \label{fig:ASS_pipeline}
+\end{figure}
+
+\clearpage
+\bibliography{refs}
+
+\end{document}

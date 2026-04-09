@@ -1,0 +1,25 @@
+# Data files (too large for GitHub)
+data/
+
+# Python virtual environment
+.venv/
+
+# Large PDFs
+*.pdf
+
+# Scratch outputs
+scratch_output.*
+pbcopy
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+
+# Claude local settings
+.claude/
