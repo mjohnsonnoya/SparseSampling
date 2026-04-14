@@ -35,6 +35,9 @@ plt.rcParams['axes.labelsize'] = 7
 plt.rcParams['axes.titlesize'] = 8
 plt.rcParams['xtick.labelsize'] = 6
 plt.rcParams['ytick.labelsize'] = 6
+plt.rcParams['xtick.major.pad'] = 2
+plt.rcParams['ytick.major.pad'] = 2
+plt.rcParams['axes.labelpad'] = 2
 
 # ═══════════════════════════════════════════════════════════════
 # Signal generation (identical to Drift_Correction_1D_Tutorial)
@@ -117,8 +120,8 @@ label_panel(ax, 'b')
 
 # (c) Distorted signal overlaid
 ax = axes[0, 2]
-ax.plot(x, A_perfect, 'C0', alpha=0.3, lw=0.6, label='Perfect')
-ax.plot(x, A_distorted, 'r', lw=0.6, label='Distorted')
+ax.plot(x, A_perfect, 'C0', alpha=0.3, lw=0.6, label='Perfect lattice')
+ax.plot(x, A_distorted, 'r', lw=0.6, label='Distorted (measured)')
 ax.plot(atoms_perfect, atoms_perfect * 0, 'C0.', ms=4)
 ax.plot(atoms_distorted, atoms_distorted * 0, 'ro', ms=3, mew=0.5)
 for i, a in enumerate(atoms_perfect):
@@ -147,38 +150,44 @@ label_panel(ax, 'd')
 
 # (e) cos lock-in product (raw)
 ax = axes[1, 1]
-ax.plot(x, prod_cos, 'C0', lw=0.5, alpha=0.6)
-ax.plot(x, 0.5 * np.cos(theta_fn(x)), 'k--', lw=1, alpha=0.7)
+ax.plot(x, prod_cos, 'C0', lw=0.5, alpha=0.6, label=r'$A(r) \cdot \cos(kr)$')
+ax.plot(x, 0.5 * np.cos(theta_fn(x)), 'k--', lw=1, alpha=0.7,
+        label=r'$\frac{1}{2}\cos(\theta)$ (slow)')
 ax.set_xlim(*xlim_signal)
 ax.set_ylabel('Amplitude')
+ax.legend(fontsize=4, loc='lower left')
 ax.set_title(r"$A \cdot \cos(kr)$")
 label_panel(ax, 'e')
 
 # (f) sin lock-in product (raw)
 ax = axes[1, 2]
-ax.plot(x, prod_sin, 'C1', lw=0.5, alpha=0.6)
-ax.plot(x, -0.5 * np.sin(theta_fn(x)), 'k--', lw=1, alpha=0.7)
+ax.plot(x, prod_sin, 'C1', lw=0.5, alpha=0.6, label=r'$A(r) \cdot \sin(kr)$')
+ax.plot(x, -0.5 * np.sin(theta_fn(x)), 'k--', lw=1, alpha=0.7,
+        label=r'$-\frac{1}{2}\sin(\theta)$ (slow)')
 ax.set_xlim(*xlim_signal)
+ax.legend(fontsize=4, loc='lower left')
 ax.set_title(r"$A \cdot \sin(kr)$")
 label_panel(ax, 'f')
 
 # (g) Filtered cos → X(r)
 ax = axes[2, 0]
-ax.plot(x, prod_cos, 'C0', alpha=0.2, lw=0.4)
-ax.plot(x, X_r, 'C0', lw=1.2, label='$X(r)$')
-ax.plot(x, 0.5 * np.cos(theta_fn(x)), 'k--', lw=0.8, alpha=0.5)
+ax.plot(x, prod_cos, 'C0', alpha=0.2, lw=0.4, label='Raw product')
+ax.plot(x, X_r, 'C0', lw=1.2, label=r'$X(r)$ = LPF[$A \cdot \cos$]')
+ax.plot(x, 0.5 * np.cos(theta_fn(x)), 'k--', lw=0.8, alpha=0.5,
+        label=r'True $\frac{1}{2}\cos(\theta)$')
 ax.set_xlim(*xlim_signal)
-ax.legend(fontsize=5)
+ax.legend(fontsize=4)
 ax.set_title("LPF → $X(r)$")
 label_panel(ax, 'g')
 
 # (h) Filtered sin → Y(r)
 ax = axes[2, 1]
-ax.plot(x, prod_sin, 'C1', alpha=0.2, lw=0.4)
-ax.plot(x, Y_r, 'C1', lw=1.2, label='$Y(r)$')
-ax.plot(x, -0.5 * np.sin(theta_fn(x)), 'k--', lw=0.8, alpha=0.5)
+ax.plot(x, prod_sin, 'C1', alpha=0.2, lw=0.4, label='Raw product')
+ax.plot(x, Y_r, 'C1', lw=1.2, label=r'$Y(r)$ = LPF[$A \cdot \sin$]')
+ax.plot(x, -0.5 * np.sin(theta_fn(x)), 'k--', lw=0.8, alpha=0.5,
+        label=r'True $-\frac{1}{2}\sin(\theta)$')
 ax.set_xlim(*xlim_signal)
-ax.legend(fontsize=5)
+ax.legend(fontsize=4)
 ax.set_title("LPF → $Y(r)$")
 label_panel(ax, 'h')
 
@@ -187,8 +196,8 @@ label_panel(ax, 'h')
 
 # (i) Extracted phase θ(r)
 ax = axes[2, 2]
-ax.plot(x, theta_fn(x), 'k', lw=1.5, alpha=0.4, label=r'True $\theta$')
-ax.plot(x, theta_extracted, 'r--', lw=1.2, label=r'Extracted $\theta$')
+ax.plot(x, theta_fn(x), 'k', lw=1.5, alpha=0.4, label=r'True $\theta(r) = \ln(r+1)$')
+ax.plot(x, theta_extracted, 'r--', lw=1.2, label=r'Extracted $\theta(r)$')
 ax.set_xlim(*xlim_signal)
 ax.set_ylabel(r'$\theta(r)$ (rad)')
 ax.legend(fontsize=5)
@@ -199,8 +208,8 @@ label_panel(ax, 'i')
 
 # (j) Recovered drift field
 ax = axes[3, 0]
-ax.plot(x, u_fn(x), 'k', lw=1.5, alpha=0.4, label='True $u$')
-ax.plot(x, u_extracted, 'r--', lw=1.2, label='Recovered $u$')
+ax.plot(x, u_fn(x), 'k', lw=1.5, alpha=0.4, label='True $u(r)$')
+ax.plot(x, u_extracted, 'r--', lw=1.2, label='Recovered $u(r)$')
 ax.set_xlim(*xlim_signal)
 ax.set_ylabel('$u(r)$ (nm)')
 ax.set_xlabel('Position (nm)')
@@ -210,8 +219,8 @@ label_panel(ax, 'j')
 
 # (k) Corrected signal A
 ax = axes[3, 1]
-ax.plot(x, A_perfect, 'C0', alpha=0.3, lw=0.6, label='Perfect')
 ax.plot(x, A_corrected, 'C2', lw=0.8, label='Corrected')
+ax.plot(x, A_perfect, 'C0', alpha=0.3, lw=0.6, ls='--', label='Perfect (reference)')
 ax.set_xlim(*xlim_signal)
 ax.set_ylim(-2, 2)
 ax.set_xlabel('Position (nm)')
@@ -232,6 +241,10 @@ label_panel(ax, 'l')
 
 # ── Final layout ──────────────────────────────────────────────
 plt.tight_layout(h_pad=0.3, w_pad=0.3)
+
+# Align ylabels within each column
+for col in range(3):
+    fig.align_ylabels(axes[:, col])
 
 # Save
 outpath = 'figures/fig_drift_correction_1d.pdf'
