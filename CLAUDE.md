@@ -26,12 +26,14 @@ The core idea: sparsely sample dI/dV maps (25% of pixels), reconstruct via Basis
 ## Repository Structure
 
 - `manuscript.tex` — RevTeX4-2 paper (PRB format). Uses custom macros for Q-vectors (`\Qmag`, `\Qlat`, etc.) and paragraph numbering (`\ptitle{}`)
-- `notebooks/` — Jupyter notebooks for analysis and figure generation:
+- `notebooks/` — Jupyter notebooks for analysis and figure generation. All `savefig()` calls save to `../figures/`.
   - `Sparse_sampling_figure_plot.ipynb` — Main figures for the paper
   - `Sparse_sampling_figure_plot_for_40_nm_map.ipynb` — 40 nm map figures
   - `Adaptive_sparse_sampling.ipynb` — Adaptive sparse sampling analysis
   - `Stmpy_102_dfc_tutorial_dev.ipynb` — Drift correction tutorial/development
   - `fft_figs.ipynb` — FFT visualization figures
+- `figures/` — Figure generation scripts (`.py`) and all generated figure outputs (PNGs and PDFs). All figures for the paper should reside here. PNGs and PDFs are gitignored.
+- `references/` — Reference papers and theses (all gitignored by `*.pdf`)
 - `data/` — STM data files (`.sxm` topography, `.3ds` spectroscopy, `.spy` processed maps, `.h5` reconstructions), sparse sampling masks (TSP-ordered pixel positions)
 - `scratch.py` — Quick experimentation script
 
