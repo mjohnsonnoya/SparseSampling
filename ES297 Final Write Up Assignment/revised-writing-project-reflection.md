@@ -27,6 +27,11 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
     - [ ] **2a.** Add (or clearly label) a figure showing the combined drift correction + adaptive sampling result as the headline reconstruction. It wasn't obvious whether Fig. 1 is "the best" or just an initial try.
     - [ ] **2b.** Clarify in title/abstract/intro whether adaptive sampling is a key pillar of the method, or whether the pillars are just sparse sampling + drift correction.
 
+    **Carry-over items to resolve in this pass** (deferred here from the #6 revision because they require the structural "what is our method?" decision that #2 addresses):
+    - [ ] **Discussion § future-directions paragraph (lines 199–200 in pre-revision `main.tex`; line numbers will have shifted)** currently frames ASS as *future work* with different parameters than Methods demonstrates (5%/5% in Methods vs. 80%/20% here; topography-based in Methods vs. "bias-tested map" here). Decide whether this paragraph is proposing genuine future refinements, or whether it's just an outdated pre-Methods draft that needs to be cut or rewritten to match Methods.
+    - [ ] In the same paragraph, the phrase **"resulting in high coherence"** uses "coherence" in a non-standard sense. Standard compressed-sensing coherence is the maximum inner product between the measurement basis and the sparsity basis (low is good for recovery). The paper's usage seems to mean "spatially concentrated / localized", which is misleading. Either replace with clearer wording ("spatially localized signals", "concentrated support") or drop the sentence.
+    - [ ] Same paragraph still contains "scattering centers" (two occurrences) — left untouched during comment #6 revisions to avoid a half-measure inside a paragraph slated for restructure. Sweep these to "defects" per the `CLAUDE.md` writing convention once the paragraph structure is decided.
+
     **Response:** _(to be filled in)_
     **Location in revised draft:** _(to be filled in)_
 
