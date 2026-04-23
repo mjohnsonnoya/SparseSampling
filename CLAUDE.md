@@ -52,3 +52,13 @@ The core idea: sparsely sample dI/dV maps (25% of pixels), reconstruct via Basis
 - **BPDN**: min ||x||_1 subject to ||Ax - y||_2 <= epsilon, where A = P_Omega * F^{-1}
 - **Drift correction**: Uses phase maps from topography FFTs to correct for STM tip drift during long acquisitions
 - FFT axes: Delta_q = 2*pi/L (depends only on scan length L), q_max = pi/Delta_x (Nyquist, depends on pixel spacing)
+
+## Writing conventions
+
+Marcos's background is in math and computer science; he has not taken formal quantum mechanics coursework. When a concept can be expressed with either physics-flavored or math/CS-flavored vocabulary, default to the math/CS form — both for readability and because the manuscript's contribution is signal processing and reconstruction, not physics.
+
+Specific preferences:
+- **"Fourier space"** instead of **"momentum space"** for the FT plane of STM data.
+- **"Defects"** instead of **"scattering centers"** or **"impurity-bound states"** when referring to the localized real-space features the adaptive sampling targets.
+
+Exceptions are unavoidable cases where a physics noun names the actual object being discussed (e.g., "momentum-resolved scattering" describing the physics of QPI). In those, keep the physics term. When in doubt, ask — don't silently swap terminology in passages where the physics meaning is doing real work.
