@@ -81,10 +81,65 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
     - Overleaf commit: `700e4f9` ("Demote BPDN/LASSO justification to appendix (peer review #7)").
     - **Follow-up:** Added a verified citation (van den Berg & Friedlander, SIAM J. Sci. Comput. 31(2):890–912, 2008, DOI 10.1137/080714488) supporting the BPDN/LASSO equivalence claim in the appendix. The paper explicitly proves the three formulations (BP_σ, QP_λ, LS_τ) coincide for appropriate parameter choices but that the equivalent parameters cannot be known a priori — which supports both the "formal equivalence" and "requires more precise tuning" halves of the sentence. Added as `vanDenBergSIAM2008` to `paper/refs.bib`; cited in `paper/main.tex` App. § Additional Metrics. Overleaf commit: `11d22f1`.
 
-- [ ] **8. Inline PDF annotations (typos, small suggestions).** In `Marcos Sparse_Sampling-4 AJ-1.pdf`. Not yet enumerated.
+- [ ] **8. Inline PDF annotations (typos, small suggestions).** In `Marcos Sparse_Sampling-4 AJ-1.pdf`. Full raw extraction at `ES297 Final Write Up Assignment/abby-inline-annotations.md` (via `uvx pdfannots`). ~35 inline comments, triaged below.
 
-    **Response:** _(to be filled in — once PDF is read)_
-    **Location in revised draft:** _(to be filled in)_
+    **Triage groups:**
+
+    #### Typos & fixable-in-seconds (batch into one sweep commit)
+    - [ ] **P1 Outline** — `"And"` (orphan word at "And outperforms uniform sampling…"): Abby: *"typo ?"* — fix: merge with preceding sentence or rewrite sentence.
+    - [ ] **P2 Fig. 1 caption** — `"Bi2Sr2CaCu2O8 + δ."`: Abby: *"typo w/subscripts"* — fix: use LaTeX subscript/superscript macros properly.
+    - [ ] **P2 CS section** — `"nyquist"`: Abby: *"typo capitalize?"* — fix: "Nyquist" (proper noun).
+    - [ ] **P3 Fig. 2 caption** — `"Reconstructe"`: Abby notes it as typo — fix: "Reconstructed".
+    - [ ] **P3 Methods** — `"L2"` vs earlier lowercase `"ℓ2"`: Abby: *"is this capital L2 the same as the lowercase l2 from before?"* — fix: normalize to `\ell_2` throughout for consistency.
+    - [ ] **P4 Adaptive Sparse Sampling** — stray `"` opening quote: Abby: *"typo ?"* — fix: delete or close the quote (check against surrounding text).
+    - [ ] **P5 Results** — `"we've"`: Abby: *"language too casual ?"* — fix: "we have".
+    - [ ] **P5 Results / Fig. SNR caption** — `"positions"`: Abby: *"maybe pixels instead of positions? since that's the axis used in your panel b"* — fix: "pixels".
+
+    #### Language / tone
+    - [ ] **P1 Abstract** — `"makes them good candidates for improving energy transmission."`: Abby: *"this energy transmission motivation seems like a nod to application, but doesn't seem to actually matter for your study - perhaps worth removing this and just stating the value of STM/QPI imaging upfront, especially if this is going into a physics-specific journal?"*
+    - [ ] **P3 Discussion** — `"adaptive sparse sampling"`: Abby: *"can use acronym"* (we've introduced ASS earlier) — one-word swap.
+    - [ ] _(FYI, no action needed)_ **P3** — `"Adaptive sparse sampling (ASS)"`: Abby: *"brutal acronym lol… i really liked this paragraph though it was extremely clear"* (acknowledged; not changing the acronym).
+
+    #### Citations needed
+    - [ ] **P1 Intro** — `"compressed sensing (CS)."`: Abby: *"does CS need a citation or is it a common field terminology?"* — decide + add if so (CandesIEEE2006 already in bib).
+    - [ ] **P1 Intro** — `"BPDN"`: Abby: *"is this new or does it need to be cited?"* — add Chen–Donoho–Saunders BPDN paper if we want a primary cite.
+    - [ ] **P1 Intro** — `"LASSO"`: Abby: *"what is lasso (citation)?"* — Tibshirani 1996 is the canonical LASSO reference.
+    - [ ] **P7 Adaptive Sparse Sampling** — `"[1]"`: Abby: *"see review document but it seems like there are some key areas that addl citations would be helpful"* — survey-style ask; identify which specific claims need cites during a read-through.
+
+    #### Figure formatting
+    - [ ] **P2 Fig. 1** — panels c/d/g/h hard to read at single-column size: Abby asks if we can span 2 columns or rearrange panels for larger rendering.
+    - [ ] **P2 Fig. 1** — scale bar placement (middle-right vs bottom-right): Abby flags as slightly distracting, notes it may be lab standard so feel free to ignore.
+    - [ ] **P2 Fig. 1 caption** — `"(QPI) scattering wavevectors and Bragg peaks"`: Abby: *"could be useful to label which are bragg peaks and which are qpi signal in the fig?"*
+    - [ ] **P3 Fig. 2** — color-bar sides inconsistent between figures; H/L labels on color bars: Abby asks for consistent side (left vs right) across figures, and suggests clarifying "H vs L = High vs Low" in the caption (or dropping the labels).
+    - [ ] **P3 Fig. 2** — `"the QPI features appear sharper after correction."`: Abby: *"from my untrained eye, it's not immediately obvious which features i'm looking for that correspond to QPI… labeling with arrow/circle or two around representative features."*
+    - [ ] **P5 SNR figure** — `"blue (noise floor) and red (signal)"`: Abby: *"can you make the colors match between panels a and b? i assume that the red area in both panels are supposed to refer to the same thing, but it looks orange in panel b so i got confused."*
+
+    #### Clarity / prose (go one-by-one)
+    - [ ] **P1 Intro** — `"ARPES"`: Abby notes recent ARPES work in local magnetic fields exists, suggests reframing QPI's advantage as *"ARPES, which does not simultaneously resolve both real and momentum space"*.
+    - [ ] **P1 Intro** — `"We"`: Abby: *"is 'We' here your team / Hoffman group, or generally the field of STM?"* — disambiguate.
+    - [ ] **P1 Outline** — `"the compressed sensing method"`: Abby: *"could be helpful to clarify if this is 'our' (your) compressed sensing method? or if there is an existing method called 'The' compressed sensing method?"*
+    - [ ] **P2 CS section** — `"ℓ2 constraint"`: Abby: *"what's l2? (feel free to leave if well-known in the field; if niche, say 'a key constraint' and redirect to the appendix)."*
+    - [ ] **P2 Drift Correction** — `"before or after"`: Abby: *"is this meant to be before AND after? i'm a bit confused on the challenge you are explaining here."*
+    - [ ] **P2 Fig. 1 caption** — `"BSCCO"`: Abby: *"not sure if u need to re-define BSCCO in the main text and/or beginning of this figure caption?"* (context: Bi₂Sr₂CaCu₂O₈+δ is spelled out elsewhere; use consistent form).
+    - [ ] **P2 CS section** — `"ϵ controls the allowable data-fidelity error and reflects the estimated noise level in the QPI measurements."`: Abby: *"perhaps useful to define this earlier after equation 1?"*
+    - [ ] **P3 Discussion** — `"traveling salesman problem"`: Abby: *"since you mention traveling salesman again later, can you explain briefly what this is within the text here?"* (noting: TSP is **Oppliger's prior work**, not ours — per memory/`feedback_tsp_vs_grid.md`).
+    - [ ] **P3 Fig. 2 caption** — `"Reconstructed"` (beyond the typo): Abby: *"just to confirm, this is the same reconstructed map from figure 1? would be good to label and explain."*
+    - [ ] **P5 Results** — `"It may be possible to achieve such good results with even fewer points through adaptive sparse sampling."`: Abby: *"i'm confused by this sentence - i thought you already showed the results of adaptive sparse sampling in fig 3?"* (overlaps with major #2 "what is our method?").
+
+    #### Structural (overlap with major comment #1)
+    - [ ] **P4** — `"Pedagogical illustration of drift correction"`: Abby: *"seems like the drift correction figure would be better placed earlier as figure 3 and on the previous page if possible?"* (will be resolved during the #1 figure-reordering pass).
+    - [ ] **P5 Results** — `"RESULTS"`: Abby: *"i was confused that the results showed up here after all the discussion about the limitations of your technique etc."* (this IS major comment #1; resolving that resolves this inline comment too).
+
+    #### Already addressed by earlier revisions (verify during final read-through)
+    - [x] **P1 Abstract** — `"tip drift scales linearly with time."`: asks for non-linear example. **Resolved by #5** (commit `da1f0c8`).
+    - [x] **P1 Intro** — `"nonlinear."`: asks for non-linear example. **Resolved by #5** (commit `da1f0c8`).
+    - [x] **P3 CS** — `"either by localizing key features in real space (e.g., near impurities) or by filtering in Fourier space around Bragg or QPI peaks"`: asks how priors are generated and how drift affects them. **Resolved by #6** (commit `4b9ec43`).
+    - [x] **P4** — `"the literature could be improved,"`: asks what "the literature" means. **Partially resolved by #7** (BPDN/LASSO demotion, commit `700e4f9`); full paragraph restructure deferred to #2.
+    - [x] **P6 Acknowledgements** — `"BPDN and LASSO"`: distracting in main text. **Resolved by #7** (demoted to appendix, commit `700e4f9`).
+    - [x] **P3 (positive)** — `"The key point is that the full-grid topography map has the exact same tip movement history and pixel registration as the sparsely sampled map…"`: Abby: *"this sentence was super clear and helped clarify what you were explaining earlier"* — no action needed; preserve this wording in any future edits to that section.
+
+    **Response:** _(to be filled in as items are addressed — expect a summary entry per commit)_
+    **Location in revised draft:** _(to be filled in — Overleaf commits will accumulate as we work through the list)_
 
 ---
 
