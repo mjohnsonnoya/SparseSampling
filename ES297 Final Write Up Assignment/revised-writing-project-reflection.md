@@ -85,15 +85,15 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
 
     **Triage groups:**
 
-    #### Typos & fixable-in-seconds (batch into one sweep commit)
-    - [ ] **P1 Outline** — `"And"` (orphan word at "And outperforms uniform sampling…"): Abby: *"typo ?"* — fix: merge with preceding sentence or rewrite sentence.
-    - [ ] **P2 Fig. 1 caption** — `"Bi2Sr2CaCu2O8 + δ."`: Abby: *"typo w/subscripts"* — fix: use LaTeX subscript/superscript macros properly.
-    - [ ] **P2 CS section** — `"nyquist"`: Abby: *"typo capitalize?"* — fix: "Nyquist" (proper noun).
-    - [ ] **P3 Fig. 2 caption** — `"Reconstructe"`: Abby notes it as typo — fix: "Reconstructed".
-    - [ ] **P3 Methods** — `"L2"` vs earlier lowercase `"ℓ2"`: Abby: *"is this capital L2 the same as the lowercase l2 from before?"* — fix: normalize to `\ell_2` throughout for consistency.
-    - [ ] **P4 Adaptive Sparse Sampling** — stray `"` opening quote: Abby: *"typo ?"* — fix: delete or close the quote (check against surrounding text).
-    - [ ] **P5 Results** — `"we've"`: Abby: *"language too casual ?"* — fix: "we have".
-    - [ ] **P5 Results / Fig. SNR caption** — `"positions"`: Abby: *"maybe pixels instead of positions? since that's the axis used in your panel b"* — fix: "pixels".
+    #### Typos & fixable-in-seconds (batch into one sweep commit) — **done, commit `fd9f62b`**
+    - [x] **P1 Outline** — `"And"` orphan word: rewrote as *"We further show that adaptive sparse sampling outperforms uniform sampling under certain conditions…"*; preserved the inline TODO.
+    - [x] **P2 Fig. 1 caption** — BSCCO formula subscripts: `CaCu$2$O${8+\delta}$` → `CaCu$_2$O$_{8+\delta}$`. (Same typo also fixed on P4 Discussion limitations paragraph — found via post-edit grep.)
+    - [x] **P2 CS section** — `"sub nyquist"` → `"sub-Nyquist"`.
+    - [x] **P3 Fig. 2 caption** — `"Reconstructe"`: **pdfannots false positive**; all three figure captions already have "Reconstructed" spelled correctly. No action.
+    - [x] **P3 Methods** — `\(L_2\)` → `\(\ell_2\)` for consistency with `\(\ell_1\)` and `\(\ell_2\)` used elsewhere.
+    - [x] **P4 (Discussion)** — stray closing `"` at end of the drift-correction-improvements paragraph: removed. (Note: pdfannots reported this under "Adaptive Sparse Sampling" but it was actually in the Discussion section.)
+    - [x] **P5 Results** — `"we've"` → `"we have"`.
+    - [x] **P5 SNR figure caption** — `"positions 0-30"` / `"positions 60-90"` → `"pixels 0-30"` / `"pixels 60-90"` (both occurrences).
 
     #### Language / tone
     - [ ] **P1 Abstract** — `"makes them good candidates for improving energy transmission."`: Abby: *"this energy transmission motivation seems like a nod to application, but doesn't seem to actually matter for your study - perhaps worth removing this and just stating the value of STM/QPI imaging upfront, especially if this is going into a physics-specific journal?"*
