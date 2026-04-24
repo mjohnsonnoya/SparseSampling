@@ -47,10 +47,15 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
     **Response:** _(to be filled in)_
     **Location in revised draft:** _(to be filled in)_
 
-- [ ] **5. Motivate non-linear drift for non-STM audience.** Add concrete examples of non-linear drift situations to emphasize why the method matters beyond STM specialists.
+- [x] **5. Motivate non-linear drift for non-STM audience.** Add concrete examples of non-linear drift situations to emphasize why the method matters beyond STM specialists.
 
-    **Response:** _(to be filled in)_
-    **Location in revised draft:** _(to be filled in)_
+    **Response:** Added two concrete mechanisms to the Introduction paragraph that first motivates drift as a problem. (1) Piezoelectric relaxation: the piezos that position the tip continue to creep toward a steady state after the driving voltage has stabilized, at a speed that itself varies in time. (2) Millikelvin-scale temperature variations that cause the sample and scan tubes to deform slightly, shifting the tip relative to the sample. Both mechanisms accumulate over long acquisitions, making a constant-velocity (linear) model of drift a poor fit. Language is taken from `notebooks/Stmpy_102_dfc_tutorial_dev.ipynb` § "Piezo relaxation and thermal fluctuation" so the paper text matches how Marcos explains this to himself.
+
+    Cited Lawler et al. Nature 466, 347–351 (2010) — the foundational Lawler–Fujita drift-correction paper, whose Supplementary § II names "piezoelectric mechanical creep and mK temperature variations" verbatim. Also cites Oppliger 2022 (already in bib; its SM demonstrates the linear-model failure). Dropped atmospheric pressure after searching Lawler SM, Hamidian 2012, the stmpy notebook, and web search without finding a cited STM-drift source for it.
+    **Location in revised draft:**
+    - `paper/main.tex`, § Introduction, paragraph following line 81 — four new sentences inserted after the existing "thermal drift… degrades the QPI signal" sentence.
+    - `paper/refs.bib` — new `LawlerNature2010` BibTeX entry (also useful beyond comment #5 since it's the method paper this work builds on).
+    - Overleaf commit: `b8ca789` ("Add examples of non-linear drift mechanisms (peer review #5)").
 
 - [x] **6. Clarify adaptive-sampling targeting.** How is the selective map generated without a priori knowledge of interesting regions? Is it from the topography? What happens if drift moves those regions out of their expected positions?
 
