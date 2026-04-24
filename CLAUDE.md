@@ -62,3 +62,7 @@ Specific preferences:
 - **"Defects"** instead of **"scattering centers"** or **"impurity-bound states"** when referring to the localized real-space features the adaptive sampling targets.
 
 Exceptions are unavoidable cases where a physics noun names the actual object being discussed (e.g., "momentum-resolved scattering" describing the physics of QPI). In those, keep the physics term. When in doubt, ask — don't silently swap terminology in passages where the physics meaning is doing real work.
+
+## Bibliography conventions
+
+**`paper/refs.bib` entries are alphabetized by first-author last name** (Hoffman lab guideline). When adding a new BibTeX entry, insert it in the correct alphabetical slot rather than appending to the end. Name particles like "van", "Le", etc. are treated as part of the surname for ordering (so "van den Berg" goes under "v", "Le Ster" goes under "Le"). For multiple papers by the same first author, order by publication year (oldest first).

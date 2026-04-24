@@ -100,11 +100,13 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
     - [x] **P3 Discussion** — `"adaptive sparse sampling"` → `"ASS"`: **rejected with justification.** The specific phrase *"an idea called adaptive sparse sampling"* would become *"an idea called ASS"*, which reads awkwardly — acronyms don't work naturally after *"an idea called"*. Making the swap naturally would require a sentence restructure for no real clarity gain, and the full name in a prior-art Discussion paragraph aids skimming readers. Cost of non-compliance is ~zero; cost of rewording is a sentence that reads worse. Applied the same reasoning to line 224 (Results) and did not swap.
     - [x] _(FYI, no action needed)_ **P3** — `"Adaptive sparse sampling (ASS)"`: Abby: *"brutal acronym lol… i really liked this paragraph though it was extremely clear"* — acknowledged; not changing the acronym.
 
-    #### Citations needed
-    - [ ] **P1 Intro** — `"compressed sensing (CS)."`: Abby: *"does CS need a citation or is it a common field terminology?"* — decide + add if so (CandesIEEE2006 already in bib).
-    - [ ] **P1 Intro** — `"BPDN"`: Abby: *"is this new or does it need to be cited?"* — add Chen–Donoho–Saunders BPDN paper if we want a primary cite.
-    - [ ] **P1 Intro** — `"LASSO"`: Abby: *"what is lasso (citation)?"* — Tibshirani 1996 is the canonical LASSO reference.
-    - [ ] **P7 Adaptive Sparse Sampling** — `"[1]"`: Abby: *"see review document but it seems like there are some key areas that addl citations would be helpful"* — survey-style ask; identify which specific claims need cites during a read-through.
+    #### Citations needed — **done / deferred, commit `beb9aeb`**
+    - [x] **P1 Intro** — `"compressed sensing (CS)"`: moved `\cite{CandesIEEE2006}` from the Nyquist-rate sentence to immediately after `(CS)` for explicit term attribution at first use. The Nyquist recovery math in the next sentence remains covered by `\cite{CandesCommPure2006}` at line 99.
+    - [x] **P1 Intro** — `"BPDN"`: added `\cite{ChenDonohoSaundersSIAM1998}` (Chen, Donoho, Saunders, SIAM J. Sci. Comput. 20(1):33–61, 1998) at first BPDN use in the Intro outline paragraph. Verified via websearch; DOI 10.1137/S1064827596304010.
+    - [x] **Appendix** — `"LASSO"` (note: Intro mention mooted by #7 revisions): added `\cite{Tibshirani1996}` (JRSS B 58(1):267–288) where LASSO is first introduced as a standalone algorithm in the "Comparison of BPDN and LASSO Performance" appendix paragraph. Deliberately placed at line 245 (algorithm comparison), NOT at line 243 alongside `NakanishiOhnoJPSJ2016` — co-locating would have misleadingly implied Tibshirani worked on STM/QPI.
+    - [ ] _(deferred)_ **P7** — `"[1]"`: too vague to act on without specific claims. Flag for final read-through pass or Jenny's review — identify specific unsourced claims then and decide which need sources.
+
+    **Also in the same commit:** reordered `refs.bib` alphabetically by first-author last name per Hoffman lab guideline (captured in `CLAUDE.md` "Bibliography conventions" so future sessions default to insert-in-place rather than append).
 
     #### Figure formatting
     - [ ] **P2 Fig. 1** — panels c/d/g/h hard to read at single-column size: Abby asks if we can span 2 columns or rearrange panels for larger rendering.
