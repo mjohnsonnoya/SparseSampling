@@ -42,17 +42,17 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
 
 ### Minor comments
 
-- [ ] **4. Material coverage is inconsistent.** Adaptive sampling shown only on ~~Kondo insulator~~ **CeBi (Weyl semimetal)**; drift correction only on BSCCO. Is there a reason, or should both appear on both?
+- [x] **4. Material coverage is inconsistent.** Adaptive sampling shown only on ~~Kondo insulator~~ **CeBi (Weyl semimetal)**; drift correction only on BSCCO. Is there a reason, or should both appear on both?
 
-    **Pre-#4 correction (already committed):** Discovered during a fact-check of CeBi's classification that the paper had been calling the second material a "Kondo insulator" in three places, but the actual data is CeBi (a magnetic Weyl semimetal, per the Liu thesis title and confirmed by Jenny Hoffman over email). SmB₆ (the canonical topological Kondo insulator studied separately by Pirie 2020) was a stale placeholder backed by no actual data. Corrected in three places:
-    - `paper/main.tex` line 87 (Outline): "a Kondo insulator" → "the magnetic Weyl semimetal CeBi"
-    - line 168 (Fig. 3 caption): "Full-grid topography map of a Kondo insulator" → "Full-grid topography map of CeBi (a magnetic Weyl semimetal) \cite{LiuThesis2023}"
-    - line 220 (SNR fig caption): "a Kondo insulator (SmB₆)" → "the magnetic Weyl semimetal CeBi"
+    **Pre-#4 correction (commit `3132678`):** Discovered during a fact-check that the paper had been calling the second material a "Kondo insulator" in three places, but the actual data is CeBi (a magnetic Weyl semimetal, per the Liu thesis title and confirmed by Jenny Hoffman over email). SmB₆ (the canonical Kondo insulator studied separately by Pirie 2020) was a stale placeholder backed by no actual data. Corrected line 87 (Outline), line 168 (Fig. 3 caption, with `\cite{LiuThesis2023}` added), and line 220 (SNR fig caption).
 
-    Overleaf commit: `3132678`.
+    **Response to #4 itself (commit `97090bf`):** Conceded the point. There is no fundamental reason that drift correction is on BSCCO and ASS is on CeBi; both protocols can in principle be applied to either material. Rewrote the Discussion "Limitations: materials" paragraph to acknowledge the asymmetry honestly and flag cross-application as future work, with possible supplemental-material extension. The previous paragraph claimed only "single material BSCCO", which was already inaccurate after the CeBi correction.
 
-    **Response (to #4 itself, still to be filled in):** _Now with corrected materials in mind: ASS demo uses CeBi, drift correction uses BSCCO. Structural question remains — should both demos appear on both materials?_
-    **Location in revised draft:** _(to be filled in once #4 is addressed substantively)_
+    Concrete cross-application work (drift correction on CeBi, ASS on BSCCO, and reporting the comparison) is **deferred as a TODO**, captured both in the reflection here and as a `% TODO (Marcos)` comment in `paper/main.tex` immediately above the rewritten paragraph.
+
+    **Location in revised draft:**
+    - `paper/main.tex`, Discussion § "Limitations of our research and directions for future research: materials" — paragraph rewritten end-to-end. LaTeX `% TODO` comment inserted on the line above the paragraph.
+    - Overleaf commits: `3132678` (material correction) and `97090bf` (limitations paragraph rewrite).
 
 - [x] **5. Motivate non-linear drift for non-STM audience.** Add concrete examples of non-linear drift situations to emphasize why the method matters beyond STM specialists.
 
