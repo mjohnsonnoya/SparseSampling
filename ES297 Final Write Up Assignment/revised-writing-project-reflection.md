@@ -42,10 +42,17 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
 
 ### Minor comments
 
-- [ ] **4. Material coverage is inconsistent.** Adaptive sampling shown only on Kondo insulator; drift correction only on BSCCO. Is there a reason, or should both appear on both?
+- [ ] **4. Material coverage is inconsistent.** Adaptive sampling shown only on ~~Kondo insulator~~ **CeBi (Weyl semimetal)**; drift correction only on BSCCO. Is there a reason, or should both appear on both?
 
-    **Response:** _(to be filled in)_
-    **Location in revised draft:** _(to be filled in)_
+    **Pre-#4 correction (already committed):** Discovered during a fact-check of CeBi's classification that the paper had been calling the second material a "Kondo insulator" in three places, but the actual data is CeBi (a magnetic Weyl semimetal, per the Liu thesis title and confirmed by Jenny Hoffman over email). SmB₆ (the canonical topological Kondo insulator studied separately by Pirie 2020) was a stale placeholder backed by no actual data. Corrected in three places:
+    - `paper/main.tex` line 87 (Outline): "a Kondo insulator" → "the magnetic Weyl semimetal CeBi"
+    - line 168 (Fig. 3 caption): "Full-grid topography map of a Kondo insulator" → "Full-grid topography map of CeBi (a magnetic Weyl semimetal) \cite{LiuThesis2023}"
+    - line 220 (SNR fig caption): "a Kondo insulator (SmB₆)" → "the magnetic Weyl semimetal CeBi"
+
+    Overleaf commit: `3132678`.
+
+    **Response (to #4 itself, still to be filled in):** _Now with corrected materials in mind: ASS demo uses CeBi, drift correction uses BSCCO. Structural question remains — should both demos appear on both materials?_
+    **Location in revised draft:** _(to be filled in once #4 is addressed substantively)_
 
 - [x] **5. Motivate non-linear drift for non-STM audience.** Add concrete examples of non-linear drift situations to emphasize why the method matters beyond STM specialists.
 
