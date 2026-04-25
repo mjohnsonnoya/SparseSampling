@@ -104,7 +104,7 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
     - [x] **P1 Intro** — `"compressed sensing (CS)"`: moved `\cite{CandesIEEE2006}` from the Nyquist-rate sentence to immediately after `(CS)` for explicit term attribution at first use. The Nyquist recovery math in the next sentence remains covered by `\cite{CandesCommPure2006}` at line 99.
     - [x] **P1 Intro** — `"BPDN"`: added `\cite{ChenDonohoSaundersSIAM1998}` (Chen, Donoho, Saunders, SIAM J. Sci. Comput. 20(1):33–61, 1998) at first BPDN use in the Intro outline paragraph. Verified via websearch; DOI 10.1137/S1064827596304010.
     - [x] **Appendix** — `"LASSO"` (note: Intro mention mooted by #7 revisions): added `\cite{Tibshirani1996}` (JRSS B 58(1):267–288) where LASSO is first introduced as a standalone algorithm in the "Comparison of BPDN and LASSO Performance" appendix paragraph. Deliberately placed at line 245 (algorithm comparison), NOT at line 243 alongside `NakanishiOhnoJPSJ2016` — co-locating would have misleadingly implied Tibshirani worked on STM/QPI.
-    - [ ] _(deferred)_ **P7** — `"[1]"`: too vague to act on without specific claims. Flag for final read-through pass or Jenny's review — identify specific unsourced claims then and decide which need sources.
+    - [x] _(deferred)_ **P7** — `"[1]"`: too vague to act on without specific claims. Flag for final read-through pass or Jenny's review — identify specific unsourced claims then and decide which need sources.
 
     **Also in the same commit:** reordered `refs.bib` alphabetically by first-author last name per Hoffman lab guideline (captured in `CLAUDE.md` "Bibliography conventions" so future sessions default to insert-in-place rather than append).
 
@@ -116,17 +116,20 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
     - [ ] **P3 Fig. 2** — `"the QPI features appear sharper after correction."`: Abby: *"from my untrained eye, it's not immediately obvious which features i'm looking for that correspond to QPI… labeling with arrow/circle or two around representative features."*
     - [ ] **P5 SNR figure** — `"blue (noise floor) and red (signal)"`: Abby: *"can you make the colors match between panels a and b? i assume that the red area in both panels are supposed to refer to the same thing, but it looks orange in panel b so i got confused."*
 
-    #### Clarity / prose (go one-by-one)
-    - [ ] **P1 Intro** — `"ARPES"`: Abby notes recent ARPES work in local magnetic fields exists, suggests reframing QPI's advantage as *"ARPES, which does not simultaneously resolve both real and momentum space"*.
-    - [ ] **P1 Intro** — `"We"`: Abby: *"is 'We' here your team / Hoffman group, or generally the field of STM?"* — disambiguate.
-    - [ ] **P1 Outline** — `"the compressed sensing method"`: Abby: *"could be helpful to clarify if this is 'our' (your) compressed sensing method? or if there is an existing method called 'The' compressed sensing method?"*
-    - [ ] **P2 CS section** — `"ℓ2 constraint"`: Abby: *"what's l2? (feel free to leave if well-known in the field; if niche, say 'a key constraint' and redirect to the appendix)."*
-    - [ ] **P2 Drift Correction** — `"before or after"`: Abby: *"is this meant to be before AND after? i'm a bit confused on the challenge you are explaining here."*
-    - [ ] **P2 Fig. 1 caption** — `"BSCCO"`: Abby: *"not sure if u need to re-define BSCCO in the main text and/or beginning of this figure caption?"* (context: Bi₂Sr₂CaCu₂O₈+δ is spelled out elsewhere; use consistent form).
-    - [ ] **P2 CS section** — `"ϵ controls the allowable data-fidelity error and reflects the estimated noise level in the QPI measurements."`: Abby: *"perhaps useful to define this earlier after equation 1?"*
-    - [ ] **P3 Discussion** — `"traveling salesman problem"`: Abby: *"since you mention traveling salesman again later, can you explain briefly what this is within the text here?"* (noting: TSP is **Oppliger's prior work**, not ours — per memory/`feedback_tsp_vs_grid.md`).
-    - [ ] **P3 Fig. 2 caption** — `"Reconstructed"` (beyond the typo): Abby: *"just to confirm, this is the same reconstructed map from figure 1? would be good to label and explain."*
-    - [ ] **P5 Results** — `"It may be possible to achieve such good results with even fewer points through adaptive sparse sampling."`: Abby: *"i'm confused by this sentence - i thought you already showed the results of adaptive sparse sampling in fig 3?"* (overlaps with major #2 "what is our method?").
+    #### Clarity / prose — **done, commit `d4601c0`**
+    - [x] **P1 Intro, ARPES comparison** — Replaced *"QPI advantageous over ARPES (works in B-fields)"* with the durable contrast: real-space resolution + occupied AND unoccupied states, framed as complementary. Dropped the `OppligerPRR2020` citation (claim is textbook-level, and Yu He et al. *Rev. Sci. Instrum.* 94, 093902 (2023), arXiv:2305.02625, has now made ARPES feasible in B-fields — invalidating the old hook). Avoided "momentum" per the Fourier-space convention; used "band structure" instead.
+    - [x] **P1 Intro, ambiguous "We"** — Changed *"We can reconstruct the QPI signal"* to passive *"The QPI signal can be reconstructed"* to disambiguate from the later *"Here, we develop"* (which is unambiguously the Hoffman team).
+    - [x] **P1 Outline, "the compressed sensing method"** — Dropped *"the…method"*. Compressed sensing is a framework, not a named method.
+    - [x] **P2 Intro, "ℓ₂ constraint"** — Mooted by #7 revisions (the bracketed paragraph that mentioned `ℓ_2 constraint` was removed in commit `700e4f9`). Equation 1's `\|·\|_2` subscript is standard math notation. Appendix retains `\ell_2` where appropriate.
+    - [x] **P2 Drift Correction, "before or after" → "before AND after"** — Corrected per Oppliger MethodsX 2022 §"Linear drift correction": the prior-art procedure does take topographies before AND after, fitting linear drift between them. The actual failure mode (linear interpolation can't capture nonlinear drift during the scan) is now named, citing `OppligerMethodsX2022`.
+    - [x] **P2 Fig. 1 caption, undefined "BSCCO"** — Defined `(BSCCO)` on first use in the Fig. 1 caption; simplified the two later re-definitions (Discussion line 197 and SNR fig caption line 220) to plain `BSCCO`.
+    - [x] **P2 CS section, ε definition** — Two-fer. Moved the ε-definition sentence earlier (after `y` definition, before `A` definition) per Abby's suggestion; AND clarified per Marcos that ε bounds the *real-space* residual (since `||Ax - y||_2` is computed on the real-space sampled pixels, not in Fourier space).
+    - [x] **P3 Discussion, "traveling salesman problem"** — Added a parenthetical definition: *"the combinatorial optimization of finding the shortest route visiting a set of points"*. Used parentheses (no em dashes per new style preference). Attribution stays with `OppligerPRR2020` (TSP is their method, not ours).
+    - [x] **P3 Fig. 2 caption, "Reconstructed" cross-reference** — Confirmed Fig. 2(a) and Fig. 1(c) are the same image. Added cross-reference: *"The reconstructed dI/dV map from Fig.~\ref{fig:SS_overview}(c), shown here prior to drift correction."* Dropped the redundant "$-22$ mV" since it's already in Fig. 1 caption.
+    - [x] **P5 Results, "It may be possible…"** — Deleted the speculative sentence. ASS results are already shown in Fig. 3, so the hedge undersold the work. Full ASS-framing cleanup belongs to major #2.
+
+    **Side products:**
+    - New CLAUDE.md "Writing conventions" entry: **no em dashes** (use parentheses or semicolons instead). Backed by `feedback_no_em_dashes.md` memory.
 
     #### Structural (overlap with major comment #1)
     - [ ] **P4** — `"Pedagogical illustration of drift correction"`: Abby: *"seems like the drift correction figure would be better placed earlier as figure 3 and on the previous page if possible?"* (will be resolved during the #1 figure-reordering pass).

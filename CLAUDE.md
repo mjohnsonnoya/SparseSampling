@@ -60,8 +60,9 @@ Marcos's background is in math and computer science; he has not taken formal qua
 Specific preferences:
 - **"Fourier space"** instead of **"momentum space"** for the FT plane of STM data.
 - **"Defects"** instead of **"scattering centers"** or **"impurity-bound states"** when referring to the localized real-space features the adaptive sampling targets.
+- **No em dashes** (`---` in LaTeX). For parenthetical asides, use parentheses; for stronger separations, use semicolons or a fresh sentence. Em dashes only with explicit user request.
 
-Exceptions are unavoidable cases where a physics noun names the actual object being discussed (e.g., "momentum-resolved scattering" describing the physics of QPI). In those, keep the physics term. When in doubt, ask — don't silently swap terminology in passages where the physics meaning is doing real work.
+Exceptions are unavoidable cases where a physics noun names the actual object being discussed (e.g., "momentum-resolved scattering" describing the physics of QPI). In those, keep the physics term. When in doubt, ask, don't silently swap terminology in passages where the physics meaning is doing real work.
 
 ## Bibliography conventions
 
