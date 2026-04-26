@@ -147,13 +147,18 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
 
     **Also in the same commit:** reordered `refs.bib` alphabetically by first-author last name per Hoffman lab guideline (captured in `CLAUDE.md` "Bibliography conventions" so future sessions default to insert-in-place rather than append).
 
-    #### Figure formatting
-    - [ ] **P2 Fig. 1** — panels c/d/g/h hard to read at single-column size: Abby asks if we can span 2 columns or rearrange panels for larger rendering.
-    - [ ] **P2 Fig. 1** — scale bar placement (middle-right vs bottom-right): Abby flags as slightly distracting, notes it may be lab standard so feel free to ignore.
-    - [ ] **P2 Fig. 1 caption** — `"(QPI) scattering wavevectors and Bragg peaks"`: Abby: *"could be useful to label which are bragg peaks and which are qpi signal in the fig?"*
-    - [ ] **P3 Fig. 2** — color-bar sides inconsistent between figures; H/L labels on color bars: Abby asks for consistent side (left vs right) across figures, and suggests clarifying "H vs L = High vs Low" in the caption (or dropping the labels).
-    - [ ] **P3 Fig. 2** — `"the QPI features appear sharper after correction."`: Abby: *"from my untrained eye, it's not immediately obvious which features i'm looking for that correspond to QPI… labeling with arrow/circle or two around representative features."*
-    - [ ] **P5 SNR figure** — `"blue (noise floor) and red (signal)"`: Abby: *"can you make the colors match between panels a and b? i assume that the red area in both panels are supposed to refer to the same thing, but it looks orange in panel b so i got confused."*
+    #### Figure formatting — **decisions captured, figure work deferred (commit `fe50cc9`)**
+
+    All six items have been triaged and captured as `% TODO (Marcos, Abby peer review)` comments in `paper/main.tex` adjacent to the relevant figure environments. No figure-script / notebook work has been done; the rendered PDF is unchanged.
+
+    - [x] **P2 Fig. 1** — panels c/d/g/h hard to read at single-column size. **Accepted.** TODO above Fig. 1: switch to `figure*` environment for two-column width.
+    - [x] **P2 Fig. 1** — scale bar placement. **Accepted** (Marcos confirmed mid-right is not a Hoffman lab standard). TODO above Fig. 1: move scale bars to bottom-right of each panel.
+    - [x] **P2 Fig. 1 caption** — label which features are Bragg vs QPI. **Accepted.** TODO above Fig. 1: add Bragg vs QPI annotation callouts (arrows/circles with labels) to FT panels (e), (g), (h).
+    - [x] **P3 Fig. 2** — color-bar side consistency + H/L labels. **Accepted both sub-items** (applies across all figures). TODO above Fig. 2: standardize color-bar side and drop H/L letters (or define them in captions if kept).
+    - [x] **P3 Fig. 2** — label QPI features. **Accepted as "ask-Jenny" TODO** (per Marcos's request). TODO above Fig. 2: ask Jenny about whether to add arrow/circle annotations highlighting QPI features and confirm Hoffman-lab convention for feature callouts before implementing.
+    - [x] **P5 SNR figure** — blue/red color match between panels. **Accepted.** TODO above SNR illustration figure: use same RGB hex codes for blue (noise floor) and red (signal) across panels (a) and (b).
+
+    All six TODOs reference "Abby peer review" by name (not by issue number) so future-Marcos can interpret them after the chat context fades.
 
     #### Clarity / prose — **done, commit `d4601c0`**
     - [x] **P1 Intro, ARPES comparison** — Replaced *"QPI advantageous over ARPES (works in B-fields)"* with the durable contrast: real-space resolution + occupied AND unoccupied states, framed as complementary. Dropped the `OppligerPRR2020` citation (claim is textbook-level, and Yu He et al. *Rev. Sci. Instrum.* 94, 093902 (2023), arXiv:2305.02625, has now made ARPES feasible in B-fields — invalidating the old hook). Avoided "momentum" per the Fourier-space convention; used "band structure" instead.
