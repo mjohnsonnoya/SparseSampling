@@ -23,17 +23,31 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
     **Response:** _(to be filled in)_
     **Location in revised draft:** _(to be filled in)_
 
-- [ ] **2. Unclear which iteration is "our method" / "the best" reconstruction.**
-    - [ ] **2a.** Add (or clearly label) a figure showing the combined drift correction + adaptive sampling result as the headline reconstruction. It wasn't obvious whether Fig. 1 is "the best" or just an initial try.
-    - [ ] **2b.** Clarify in title/abstract/intro whether adaptive sampling is a key pillar of the method, or whether the pillars are just sparse sampling + drift correction.
+- [x] **2. Unclear which iteration is "our method" / "the best" reconstruction.**
+    - [x] **2a.** *(Folded into 2b's framing decision.)* The "best" reconstruction is established as Fig. 2 (BSCCO chain: sparse sampling + drift correction → 75% SNR), with ASS providing further gains demonstrated separately on CeBi. Fig. 2 caption already cross-references Fig. 1(c) per peer-review #8 clarity sweep.
+    - [x] **2b.** Picked **framing (A): headline pillars + extension.** Title and abstract feature the two pillars (sparse sampling + drift correction); ASS is named in the abstract once as a quality booster, given its own Methods/Results/Discussion treatment, and explicitly described as a quality booster on top of the core protocol.
 
-    **Carry-over items to resolve in this pass** (deferred here from the #6 revision because they require the structural "what is our method?" decision that #2 addresses):
-    - [ ] **Discussion § future-directions paragraph (lines 199–200 in pre-revision `main.tex`; line numbers will have shifted)** currently frames ASS as *future work* with different parameters than Methods demonstrates (5%/5% in Methods vs. 80%/20% here; topography-based in Methods vs. "bias-tested map" here). Decide whether this paragraph is proposing genuine future refinements, or whether it's just an outdated pre-Methods draft that needs to be cut or rewritten to match Methods.
-    - [ ] In the same paragraph, the phrase **"resulting in high coherence"** uses "coherence" in a non-standard sense. Standard compressed-sensing coherence is the maximum inner product between the measurement basis and the sparsity basis (low is good for recovery). The paper's usage seems to mean "spatially concentrated / localized", which is misleading. Either replace with clearer wording ("spatially localized signals", "concentrated support") or drop the sentence.
-    - [ ] Same paragraph still contains "scattering centers" (two occurrences) — left untouched during comment #6 revisions to avoid a half-measure inside a paragraph slated for restructure. Sweep these to "defects" per the `CLAUDE.md` writing convention once the paragraph structure is decided.
+    **Crucial conceptual correction from Marcos:** The drift-correction *algorithm* is not novel — it's Lawler–Fujita (Lawler 2010, Hamidian 2012). What IS novel is the *simultaneous acquisition protocol* that records full-grid topography alongside the sparse dI/dV map, which makes Lawler–Fujita applicable to sparsely-sampled data (something Oppliger's linear-interpolation approach doesn't achieve). The Intro now correctly attributes the contribution.
 
-    **Response:** _(to be filled in)_
-    **Location in revised draft:** _(to be filled in)_
+    **Response:** Five edits in `paper/main.tex` that lock in the headline-pillars + extension framing:
+    - **Intro line 84** rewritten: *"Here, we develop an acquisition protocol that simultaneously records a full-grid topography alongside the sparsely measured dI/dV map, enabling Lawler–Fujita drift correction \cite{LawlerNature2010} of the reconstructed sparse data. We further show that integrating adaptive sparse sampling \cite{OppligerMethodsX2022} with this protocol provides further gains in reconstruction quality."* This kills the previous conflation that called the contribution an "ASS approach that corrects for nonlinear drift" and correctly attributes the novelty to the simultaneous acquisition.
+    - **Abstract** gained one ASS sentence near the end: *"Integrating adaptive sparse sampling with this protocol provides further gains in reconstruction quality."*
+    - **Discussion future-directions paragraph** rewritten end-to-end. Old paragraph framed ASS as future work with implementation details duplicating Methods, and used "high coherence" in a non-standard sense + two "scattering centers" instances. New two-sentence paragraph: *"\ptitle{Adaptive sparse sampling and future ML extensions} Integrating adaptive sparse sampling further improves reconstruction quality compared to uniform sparse sampling (Sec.~II.C, Fig.~\ref{fig:ASS}). A natural future extension is to use machine learning to optimize the adaptive sampling distribution based on preliminary maps \cite{LiuThesis2023}."*
+    - **Results section** gained a bridging sentence: *"Adaptive sparse sampling further improves reconstruction quality beyond uniform sparse sampling (Fig.~\ref{fig:ASS})."* + LaTeX TODO for the pending quantitative SNR.
+    - **Fig. 3 caption** gained a parallel LaTeX TODO marker (no prose change).
+
+    **Location in revised draft:**
+    - `paper/main.tex`: Intro (line 84), Abstract, Discussion (the rewritten ASS/ML paragraph), Results paragraph (last sentence), Fig. 3 caption header.
+    - Overleaf commit: `894b3f9`.
+
+    **Carry-over items from #6 — now resolved:**
+    - [x] **Discussion future-directions paragraph restructure** — resolved by the full rewrite above. Paragraph no longer frames ASS as future work; ML is now the only forward-looking element.
+    - [x] **"high coherence" non-standard usage** — resolved by paragraph rewrite (the entire sentence using that term is gone).
+    - [x] **"scattering centers" (two occurrences in this paragraph)** — resolved by paragraph rewrite. `rg -n 'scattering center' paper/main.tex` now returns zero hits.
+
+    **Open hooks for comment #3 (numerical SNR per iteration):**
+    - LaTeX `% TODO` comments at two locations in `paper/main.tex` (Fig. 3 caption header and Results paragraph) mark where the quantitative ASS-vs-uniform SNR will slot in once notebook work produces the numbers.
+    - The framing now anticipates a cumulative-SNR story: *baseline sparse sampling → +drift correction (75% SNR) → +ASS (TBD additional gain)*. Comment #3 work will populate the numbers without further structural change.
 
 - [ ] **3. Attach numerical SNR improvements to each iteration.** Text cites qualitative improvements in sharpness; quantify with SNR for drift correction, adaptive sampling, etc.
 
