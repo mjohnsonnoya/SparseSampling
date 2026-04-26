@@ -49,10 +49,28 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
     - LaTeX `% TODO` comments at two locations in `paper/main.tex` (Fig. 3 caption header and Results paragraph) mark where the quantitative ASS-vs-uniform SNR will slot in once notebook work produces the numbers.
     - The framing now anticipates a cumulative-SNR story: *baseline sparse sampling → +drift correction (75% SNR) → +ASS (TBD additional gain)*. Comment #3 work will populate the numbers without further structural change.
 
-- [ ] **3. Attach numerical SNR improvements to each iteration.** Text cites qualitative improvements in sharpness; quantify with SNR for drift correction, adaptive sampling, etc.
+- [x] **3. Attach numerical SNR improvements to each iteration.** Text cites qualitative improvements in sharpness; quantify with SNR for drift correction, adaptive sampling, etc.
 
-    **Response:** _(to be filled in)_
-    **Location in revised draft:** _(to be filled in)_
+    **Wave 1 (prose framework, commit `c79192c`):** Restructured Results section to tell the cumulative-SNR story explicitly, with one sentence per stage of the protocol:
+    - *BPDN reconstruction alone, without drift correction, recovers \TBD% of the ground truth SNR at a 25% sampling rate on BSCCO.*
+    - *Combining BPDN reconstruction with our drift correction protocol raises this to 75% (Fig.~\ref{fig:SNR_vs_Sparsity}).*
+    - *Combining adaptive sparse sampling with the protocol provides a further \TBD% gain on the CeBi data set (Fig.~\ref{fig:ASS}).*
+
+    Also fixed a latent ambiguity in the Outline (line 87) that previously phrased the 75% as if it referred to BPDN alone with drift correction adding more. Marcos confirmed: 75% is the combination (BPDN + Lawler–Fujita drift correction). The Outline now matches the Results.
+
+    Added a `\TBD` macro to the preamble that renders as a red `[TBD]` in the PDF, so the two missing numbers are visually flagged at-a-glance in the rendered output (not just in source).
+
+    **Wave 2 (deferred — notebook work):** Two numbers still to be computed and slotted into the `\TBD` placeholders:
+    1. **Baseline BPDN-only SNR on BSCCO** without drift correction (same 25% sampling rate, same data as the existing 75% measurement).
+    2. **ASS-vs-uniform SNR gain on CeBi** (paired comparison at the same sampling fraction).
+
+    Both tasks are captured as a consolidated `% TODO (Marcos)` comment in `paper/main.tex` immediately following the cumulative-SNR paragraph, and as a `% TODO` comment above the Fig. 3 caption (legacy from commit `894b3f9`, now redundant with the Results-side TODO but kept for figure-side visibility).
+
+    **Location in revised draft:**
+    - `paper/main.tex` line 29: new `\TBD` macro.
+    - `paper/main.tex` Outline (line 88): rewrote 75% attribution.
+    - `paper/main.tex` Results (lines ~227–229): added cumulative-SNR paragraph with two `\TBD` placeholders + consolidated Wave 2 TODO comment.
+    - Overleaf commit: `c79192c`.
 
 ### Minor comments
 
