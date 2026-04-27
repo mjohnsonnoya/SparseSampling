@@ -4,9 +4,46 @@ Running log of how we responded to peer review feedback on the sparse sampling p
 
 ---
 
-## Process narrative (2-3 paragraphs)
+## Process narrative
 
-_To be written after the revisions are complete. Will cover: how the writing process developed over the semester, what challenges came up, how peer review shaped the draft._
+### WRITING PROCESS DURING THIS SEMESTER
+
+> **Topic-sentence prompt (keep, rephrase, or replace):** *"Over the course of this semester, my approach to drafting [the paper / this manuscript / my first methods paper] evolved as [I learned X / I tried different methods]."*
+
+Bullet hooks (expand each into a sentence or two of prose):
+
+- The role of the `\ptitle{}` paragraph-title macro in your workflow — writing structured outlines as paragraph titles first and then expanding into prose second. (If this isn't actually how you worked, replace with whatever your actual sequencing was.)
+- How drafting against an Overleaf source synchronized with a local clone (the `paper/` setup we configured mid-semester) changed your iteration loop — one source of truth across web edits and local edits.
+- Iteration with PI (Jenny) and postdoc mentor (Richard) shaping the contribution narrative early. The "what is our method?" framing call-out from comment #2 was a downstream consequence of those discussions.
+- [What changed in your method between the first draft and the version you sent to peer reviewers? What method do you settle into now?]
+- [Any specific tools or workflows that became central — e.g., the Overleaf git bridge, AI-assisted revision, the reflection-as-tracker document — were they always there or did you adopt them mid-semester?]
+
+### CHALLENGES
+
+> **Topic-sentence prompt:** *"The biggest challenge I encountered this semester was [translating between domains / calibrating vocabulary for a mixed audience / something else]."*
+
+Bullet hooks:
+
+- **Math/CS background vs physics-paper conventions.** You think about the work as signal processing (compressed sensing, BPDN, sparse reconstruction); a PRB reader reads it as physics. Bridging the two genres took specific calibration. (Cite the Fourier space vs momentum space decision, or the "drift phase map" canonicalization you did, as concrete examples if helpful.)
+- **Vocabulary calibration moments.** Choosing *"Fourier space"* over *"momentum space"*, *"defects"* over *"scattering centers"*, dropping *"integrating"* in favor of *"combining"*, avoiding em dashes — each a small audience-awareness moment. (You don't have to list all of these; one or two as concrete examples is plenty.)
+- [Other challenges? Time management, juggling research output with manuscript revision, deciding what to defer to a future paper, dealing with stale draft elements (Fig. 4 placeholder vs Fig. 8) — pick the ones you actually struggled with.]
+- **How you overcame it.** Reading papers outside your subject area to learn academic writing as a genre (sample's strategy if it applies); building a personal style guide (`CLAUDE.md` writing-conventions section + memory file) as you discovered preferences; iterating with co-authors; using AI assistance to apply consistent style sweeps. [Pick the strategies that were actually load-bearing for you.]
+
+### PEER REVIEW PROCESS
+
+> **Topic-sentence prompt:** *"The peer review process surfaced [N major and M minor concerns / a coherent set of structural and prose-level issues] that meaningfully reshaped the manuscript."*
+
+Bullet hooks:
+
+- **The value of two distinct reviewers.** Abby and Shicheng both flagged the Discussion-before-Results problem (high-confidence structural concern), but Shicheng alone caught the inconsistent "drift phase map" / "drift field" / "phase map" terminology — a non-overlapping catch. Cross-comparison between independent reviewers raised confidence in shared concerns and surfaced what either reviewer missed alone.
+- **Building the reflection document as a tracker.** Structured Response/Location entries per item (analogous to the sample's "chart for reviewer comments with progress tracker"). Let you task-switch into revision in small blocks without losing context — useful when long uninterrupted blocks weren't available.
+- **Framing-first revision strategy.** Addressing comment #2 ("what is our method?") *before* sweeping edits saved you from re-litigating downstream changes. The headline-pillars + extension framing (sparse sampling + drift correction as the headline; ASS as a quality-boosting extension) is the load-bearing decision the rest of the revision flowed from. [Mention this concretely if you want.]
+- **Reject-with-justification as a peer-review-response skill.** Not every comment becomes a change. Examples you can cite: the *adaptive sparse sampling* → *ASS* acronym swap (rejected because *"an idea called ASS"* reads worse than the spelled-out form), the Fig. 1 panel-pointing TODO (rejected on show-don't-tell grounds — the layout already does the comparison work). Engaging with comments without mechanically applying them is itself a learned skill.
+- [Anything else you learned about peer review specifically? E.g., the value of inline annotations on a draft (Abby) vs strategic high-level feedback (Shicheng) — different forms of review surface different kinds of issues.]
+
+---
+
+*The full list of peer review main points and responses follows in the next section.*
 
 ---
 
