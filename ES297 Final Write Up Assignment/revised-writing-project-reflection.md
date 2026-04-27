@@ -16,12 +16,27 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
 
 ### Major comments
 
-- [ ] **1. Placement of "Results" section V disrupts flow.** After the implications/limitations on p.4 the text feels like it should lead into the conclusion, but Results come next. Also unclear whether Figs 5 & 6 (SNR) reflect data before or after drift correction.
-    - [ ] **1a.** Move Figs 5 & 6 (SNR) earlier in the text to introduce SNR as the figure of merit — or move to supplement if their purpose is just the SNR calculation method.
-    - [ ] **1b.** SNR isn't mentioned on pp. 2–4 where sampling improvements are introduced. Add SNR references there so it's clear SNR improves with each iteration.
+- [x] **1. Placement of "Results" section V disrupts flow.** After the implications/limitations on p.4 the text feels like it should lead into the conclusion, but Results come next. Also unclear whether Figs 5 & 6 (SNR) reflect data before or after drift correction.
+    - [x] **1a.** Moved Fig. 5 (SNR illustration) to the appendix § *Additional Metrics* where SNR computation is documented in detail; Fig. 6 (SNR-vs-sparsity, the actual quantitative result) stays in Results. Section reordering (1a's other half) handled below.
+    - [x] **1b.** Unbracketed the SNR-introduction paragraph already drafted in the Compressed Sensing subsection at line 117. SNR is now introduced in Section II.A (well before Results) as one of two reconstruction-quality metrics, with a forward reference to the appendix figure.
 
-    **Response:** _(to be filled in)_
-    **Location in revised draft:** _(to be filled in)_
+    **Response:** Three edits in `paper/main.tex` (medium-tier per Marcos's choice):
+    1. **Swapped Discussion ↔ Results sections.** New Section IV = Results, new Section V = Discussion. The Outline paragraph was already written for this order ("*In Section~IV, we show that combining BPDN reconstruction with our drift correction protocol recovers 75% SNR; In Section~V, we contextualize our contributions*"), so the swap aligned the paper with its own Outline. The fix was structural (block swap), not prose-level.
+    2. **Moved Fig. 5 (SNR illustration) to appendix § *Additional Metrics*.** This figure is methodology-documenting (shows *how* SNR is computed) rather than result-presenting, so it lives more naturally in the appendix that already discusses SNR computation. The TODO comment about RGB color matching across panels (a) and (b) traveled with the figure.
+    3. **Unbracketed the SNR-introduction paragraph in CS subsection** (line 117). The paragraph was already drafted with `[...]` markers; the brackets indicated draft uncertainty. Removing them turned the paragraph into body text that introduces SNR as our reconstruction-quality metric early in the paper.
+
+    **Hidden insight:** the Outline's promised structure (II=theory, III=methods, IV=Results, V=Discussion) was already what Abby asked for — the paper's actual section ordering had drifted from the Outline somewhere along the way. The fix was largely mechanical because the Outline didn't need any rewording to match the post-swap structure.
+
+    **Location in revised draft:**
+    - `paper/main.tex` lines 117 (unbracketed SNR-intro paragraph in CS subsection).
+    - `paper/main.tex` lines 194–232 (Results section now in former Discussion slot; Discussion now in former Results slot).
+    - `paper/main.tex` lines 247–254 (Fig. 5 SNR_illustration moved into appendix § *Additional Metrics*).
+    - Overleaf commit: `1b1c9c6`.
+
+    **Out of scope (deliberate, deferred):**
+    - Renaming `\section{Main Text}` → `\section{Theory}` (heavy-tier polish).
+    - Cleaning up the empty `\subsection{Compressed Sensing Methods}` placeholder in Methods (heavy-tier polish).
+    - Adding SNR mentions to Drift Correction and Adaptive Sparse Sampling subsections individually. The CS-subsection unbracketing introduces SNR globally; specific layered SNR claims live in Results (with `\TBD`s from comment #3 work).
 
 - [x] **2. Unclear which iteration is "our method" / "the best" reconstruction.**
     - [x] **2a.** *(Folded into 2b's framing decision.)* The "best" reconstruction is established as Fig. 2 (BSCCO chain: sparse sampling + drift correction → 75% SNR), with ASS providing further gains demonstrated separately on CeBi. Fig. 2 caption already cross-references Fig. 1(c) per peer-review #8 clarity sweep.
