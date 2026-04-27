@@ -237,12 +237,15 @@ Shicheng's review focuses on three major axes: clarity of the drift correction m
 
 ### Minor comments
 
-- [ ] **1. Improve clarity and conciseness of writing.** Shicheng noted long sentences, sentence fragments, and some informal phrasing.
+- [x] **1. Improve clarity and conciseness of writing.** Shicheng noted long sentences, sentence fragments, and some informal phrasing.
 
-    **Status (partially addressed):** the Abby clarity/prose sweep (commit `d4601c0`) and typo sweep (`fd9f62b`) addressed many specific items. Several sentences in Methods and Discussion likely still benefit from tightening.
+    **Status (addressed at editorial level; specifics need reviewer follow-up):** the Abby clarity/prose sweep (commit `d4601c0`) and typo sweep (`fd9f62b`) targeted many specific instances that were flagged via inline PDF annotations. Shicheng's comment is general — he doesn't cite specific sentences he found long, fragmentary, or informal — so it's hard to know which sentences he had in mind beyond the ones Abby already flagged.
 
-    **Response:** Defer further tightening to a future general-copyedit pass.
-    **Location in revised draft:** Partial — see Abby commits `d4601c0`, `fd9f62b`.
+    **Response:** Acknowledged. Plan to follow up with Shicheng directly to ask which sentences he had in mind. If he points to specific instances, those land in a focused copyedit pass; if his comment was general, the existing Abby-driven edits are the substantive response and any further tightening is captured under a general "copyedit before submission" TODO.
+
+    **Location in revised draft:** Partial — see Abby commits `d4601c0` (clarity sweep) and `fd9f62b` (typo sweep). No new paper edits in this pass for Shicheng's comment.
+
+    **Action item (Marcos):** ask Shicheng for specific sentences he found long, fragmentary, or informal so the comment can be addressed concretely if needed.
 
 - [ ] **2. Strengthen figure integration.** Shicheng wants body text that more consistently guides the reader on what to notice in each figure ("explicitly stating what improvement is visible in each panel").
 
