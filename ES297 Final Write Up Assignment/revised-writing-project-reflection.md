@@ -255,12 +255,21 @@ Shicheng's review focuses on three major axes: clarity of the drift correction m
 
     **Action item (Marcos):** ask Shicheng for specific sentences he found long, fragmentary, or informal so the comment can be addressed concretely if needed.
 
-- [ ] **2. Strengthen figure integration.** Shicheng wants body text that more consistently guides the reader on what to notice in each figure ("explicitly stating what improvement is visible in each panel").
+- [x] **2. Strengthen figure integration.** Shicheng wants body text that more consistently guides the reader on what to notice in each figure ("explicitly stating what improvement is visible in each panel").
 
-    **Status (partially addressed):** Abby's figure-formatting bucket (commit `fe50cc9`) captured TODOs for Bragg/QPI annotation callouts on Fig. 1 and Fig. 2 — those address the figure-side. Shicheng's complementary ask is *prose-side* guidance: sentences pointing the reader to specific panels.
+    **Status (deferred with TODO breadcrumbs):** Abby's figure-formatting bucket (commit `fe50cc9`) handles the *figure-side* (annotation callouts, color-bar consistency, etc.). Shicheng's ask is *prose-side* — body text pointing readers at specific panels. We chose to defer the prose updates with TODO breadcrumbs rather than write the panel-pointing prose now, since the prose describes panels that may change when figures are regenerated. Pairing prose updates with figure regeneration prevents drift between the two.
 
-    **Response:** Half resolved (figure annotations TODO'd); prose-side guidance is a separate small open task that can land alongside the figure regeneration work.
-    **Location in revised draft:** Partial — Overleaf commit `fe50cc9` for figure-side TODOs.
+    **Response:** Three new `% TODO (Marcos, Shicheng peer review)` comments added above figure environments where body-text pointing is missing:
+    - Above Fig. 2 (`fig:Methodology`): extend the existing panel-(d) pointer ("Bragg peaks become sharper") to panels (a)-(c).
+    - Above Fig. 3 (`fig:ASS`): add panel-pointing prose at body-text references for panels (a)-(f).
+    - Above Fig. 6 (`fig:SNR_vs_Sparsity`): point readers at diminishing-returns regime once CeBi curves are added.
+
+    **Rejected with justification: Fig. 1 panel-pointing TODO.** The original plan included a fourth TODO above Fig. 1 (`fig:SS_overview`) suggesting *"compare BPDN reconstruction in panel (c) against ground truth in panel (d)"*-style prose. **Rejected on show-don't-tell grounds:** Fig. 1's four-panel + four-FT-panel layout (topography → sparse → reconstruction → ground truth, with each FT below) already does the comparison work visually. Adding prose telling the reader to compare panels would tell rather than show what the figure layout already invites. The figure carries its own pedagogical structure; pointing prose would be redundant.
+
+    **Location in revised draft:**
+    - `paper/main.tex` lines 133, 172, 203 (three new TODOs).
+    - Overleaf commit: `fea8603`.
+    - The figure-side annotation TODOs (Abby commit `fe50cc9`) remain in place; the prose-side TODOs from this commit will land alongside the figure regeneration when that work happens.
 
 - [x] **3. Use consistent terminology.** Shicheng flagged "drift phase map", "drift field", and "phase map" being used somewhat interchangeably.
 
