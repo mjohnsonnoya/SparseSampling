@@ -12,8 +12,6 @@ _To be written after the revisions are complete. Will cover: how the writing pro
 
 ## Reviewer: Abigail Jiang (`reviews/Abby-review-for-Marcos.pdf`)
 
-_Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — not yet catalogued below._
-
 ### Major comments
 
 - [x] **1. Placement of "Results" section V disrupts flow.** After the implications/limitations on p.4 the text feels like it should lead into the conclusion, but Results come next. Also unclear whether Figs 5 & 6 (SNR) reflect data before or after drift correction.
@@ -207,6 +205,77 @@ _Inline PDF annotations are in `reviews/Marcos Sparse_Sampling-4 AJ-1.pdf` — n
 
 ---
 
-## Reviewer: (second reviewer)
+## Reviewer: Shicheng Qiu (`reviews/Shicheng Qiu-Review-for-Marcos.docx.pdf`)
 
-_To be added when we process the second peer review._
+Shicheng's review focuses on three major axes: clarity of the drift correction method, overall paper organization, and depth of results interpretation. Many of his concerns overlap with Abby's review and are already addressed by the same revisions; some open issues remain.
+
+### Major comments
+
+- [ ] **1. Strengthen the explanation of the drift correction method.** Shicheng asks for (a) a more concrete description of how drift phase maps are obtained from topography, (b) a clearer step-by-step description of how correction is applied, and (c) an explicit schematic / conceptual workflow figure.
+
+    **Status (partially addressed):** the Intro now correctly attributes the drift-correction algorithm to Lawler–Fujita with citation `LawlerNature2010` (commit `894b3f9`), so the "what algorithm we use" is clear. The step-by-step "how to compute drift phase maps from topography" remains a TODO; Fig. 4 (`fig:drift_pedagogical`) is referenced as a placeholder for the schematic Shicheng asks for, but the actual figure is "in preparation" per its caption.
+
+    **Response:** The schematic is already on Marcos's TODO list (Fig. 4 placeholder). The step-by-step body-text description is a moderate-cost addition for a future revision pass; not done in this peer-review cycle.
+
+    **Location in revised draft:** N/A (deferred). The Fig. 4 placeholder caption itself is Marcos's existing reminder.
+
+- [x] **2. Improve organization and flow.** Shicheng cited (a) Discussion before Results, (b) methodological explanations spread across multiple sections, (c) repeated drift motivation. Asked for the standard Intro → Methods → Results → Discussion structure.
+
+    **Status (substantively addressed):** **already resolved by Abby comment #1 work** in commit `1b1c9c6`. The Discussion-before-Results swap explicitly addresses Shicheng's (a). The Outline cleanup during the cumulative-SNR framework work (commit `c79192c`) tightened the repeated drift motivation by removing one redundant clause.
+
+    **Open sub-item:** Shicheng's (b) "methodological explanations spread across multiple sections" — this is the heavier "Main Text vs Methods" structural debt (an empty `\subsection{Compressed Sensing Methods}` placeholder, and the split between `\section{Main Text}` and `\section{Methods}`) — flagged as out-of-scope for this revision pass.
+
+    **Response:** Section swap done; deeper Methods restructure deferred.
+    **Location in revised draft:** Overleaf commits `1b1c9c6` (section swap), `c79192c` (Outline cleanup).
+
+- [ ] **3. Expand discussion of results and interpretation.** Shicheng asks: what does 75% SNR recovery imply in practical experimental terms? Under what conditions does the method perform best or struggle? How should one think about the trade-off between sampling rate and accuracy?
+
+    **Status (open):** distinct from Abby comment #3 (which was about *attaching numerical SNR to each iteration*). Shicheng wants *narrative interpretation*: practical meaning of 75%, regime of best applicability, sampling-rate vs accuracy trade-off discussion. None of these are currently in the Discussion section.
+
+    **Response:** Open. A future revision pass should add 1–2 paragraphs to the Discussion: (i) interpreting 75% SNR practically (e.g., "this allows 12-hour acquisitions instead of 2.5 days while preserving QPI features at the dispersion-relevant wavevectors"), (ii) naming the regimes where the method works best (e.g., "drift speeds up to X nm/hour, sparsity rates ≥ 25% for BSCCO-like materials"), (iii) discussing the trade-off curve visible in Fig. 6.
+    **Location in revised draft:** N/A (open TODO).
+
+### Minor comments
+
+- [ ] **1. Improve clarity and conciseness of writing.** Shicheng noted long sentences, sentence fragments, and some informal phrasing.
+
+    **Status (partially addressed):** the Abby clarity/prose sweep (commit `d4601c0`) and typo sweep (`fd9f62b`) addressed many specific items. Several sentences in Methods and Discussion likely still benefit from tightening.
+
+    **Response:** Defer further tightening to a future general-copyedit pass.
+    **Location in revised draft:** Partial — see Abby commits `d4601c0`, `fd9f62b`.
+
+- [ ] **2. Strengthen figure integration.** Shicheng wants body text that more consistently guides the reader on what to notice in each figure ("explicitly stating what improvement is visible in each panel").
+
+    **Status (partially addressed):** Abby's figure-formatting bucket (commit `fe50cc9`) captured TODOs for Bragg/QPI annotation callouts on Fig. 1 and Fig. 2 — those address the figure-side. Shicheng's complementary ask is *prose-side* guidance: sentences pointing the reader to specific panels.
+
+    **Response:** Half resolved (figure annotations TODO'd); prose-side guidance is a separate small open task that can land alongside the figure regeneration work.
+    **Location in revised draft:** Partial — Overleaf commit `fe50cc9` for figure-side TODOs.
+
+- [ ] **3. Use consistent terminology.** Shicheng flagged "drift phase map", "drift field", and "phase map" being used somewhat interchangeably.
+
+    **Status (open, confirmed by grep):** `paper/main.tex` currently uses *"drift phase map"* (lines 121, 142), *"drifting field"* (line 199), *"drift field"* (line 278), and *"phase map"* (lines 141, 199) — at least four phrasings.
+
+    **Response:** Open. A future revision pass should pick one canonical term (suggested: *"drift phase map"*, since it most accurately names the 2D phase field obtained from the topography FT) and sweep all variants. Easy to capture as a `% TODO` in source.
+    **Location in revised draft:** N/A (open TODO).
+
+- [x] **4. Clarify the role of adaptive sampling.** Shicheng wants ASS framed clearly as an extension or future direction; his concern was that its role relative to the main contribution wasn't clear.
+
+    **Status (resolved):** **already addressed by Abby comment #2 work** in commit `894b3f9`. The headline-pillars + extension framing is now consistent across abstract, intro, methods, results, and discussion. ASS is explicitly named as a quality-boosting extension on the core sparse-sampling + drift-correction protocol.
+    **Response:** Resolved.
+    **Location in revised draft:** Overleaf commit `894b3f9`.
+
+### Overall evaluation
+
+Shicheng's verdict was positive: *"This is a strong and thoughtful paper that addresses a meaningful problem in QPI measurements. The proposed approach is well motivated and shows promising results. With clearer organization, more detailed explanation of key methods, and stronger interpretation of results, the paper would be significantly improved."* His three "would be improved" axes track his major comments #2 (organization), #1 (drift method explanation), and #3 (results interpretation), in roughly that order of importance.
+
+### Cross-cutting summary (Abby ↔ Shicheng overlap)
+
+Significant overlap that resolved together:
+- Shicheng major #2 (organization) ↔ Abby major #1 (Results placement). **Resolved together** by commit `1b1c9c6`.
+- Shicheng minor #4 (ASS role) ↔ Abby major #2 (what is "our method"). **Resolved together** by commit `894b3f9`.
+- Shicheng minor #2 (figure integration, prose-side) ↔ Abby figure-formatting bucket (figure-side). **Partially resolved**; figure-side TODOs captured in commit `fe50cc9`.
+
+Distinct asks Shicheng raises that Abby didn't:
+- Shicheng major #1 (drift correction step-by-step) — partially deferred via Fig. 4 placeholder.
+- Shicheng major #3 (interpret results practically) — distinct from Abby #3's numerical-SNR-per-iteration. Open TODO.
+- Shicheng minor #3 (terminology consistency) — specific copyedit. Open TODO with a clear sweep target.
