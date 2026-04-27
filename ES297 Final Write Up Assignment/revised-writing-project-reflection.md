@@ -251,12 +251,17 @@ Shicheng's review focuses on three major axes: clarity of the drift correction m
     **Response:** Half resolved (figure annotations TODO'd); prose-side guidance is a separate small open task that can land alongside the figure regeneration work.
     **Location in revised draft:** Partial — Overleaf commit `fe50cc9` for figure-side TODOs.
 
-- [ ] **3. Use consistent terminology.** Shicheng flagged "drift phase map", "drift field", and "phase map" being used somewhat interchangeably.
+- [x] **3. Use consistent terminology.** Shicheng flagged "drift phase map", "drift field", and "phase map" being used somewhat interchangeably.
 
-    **Status (open, confirmed by grep):** `paper/main.tex` currently uses *"drift phase map"* (lines 121, 142), *"drifting field"* (line 199), *"drift field"* (line 278), and *"phase map"* (lines 141, 199) — at least four phrasings.
+    **Response:** Picked **"drift phase map"** as the canonical body-text term and swept all variants. Three edits in `paper/main.tex` (five word/phrase substitutions): line 141 `\ptitle` ("phase maps" → "drift phase maps"); line 142 ("drift maps" → "drift phase maps"); line 199 `\ptitle` + body ("drifting field" → "drift phase map" ×2, "phase maps" → "drift phase maps" ×1).
 
-    **Response:** Open. A future revision pass should pick one canonical term (suggested: *"drift phase map"*, since it most accurately names the 2D phase field obtained from the topography FT) and sweep all variants. Easy to capture as a `% TODO` in source.
-    **Location in revised draft:** N/A (open TODO).
+    **Intentional exception:** Fig. 4 caption (`fig:drift_pedagogical`, line 278) retains "drift field" because there `u(r)` is explicitly defined as a *displacement* function (units: nm), distinct from the *phase* `θ(r)` (units: radians) related by `u(r) = θ(r)/k`. Renaming `u(r)` would create equation/naming inconsistency with the explicit math. The body text uses "drift phase map" as the operational object; the figure caption uses "drift field" only where the math explicitly defines `u(r)` as a displacement function.
+
+    **Location in revised draft:**
+    - `paper/main.tex` lines 141, 142, 199 (three edits, all in body text).
+    - `paper/main.tex` line 278 (Fig. 4 caption) intentionally untouched.
+    - Overleaf commit: `dec6129`.
+    - Verified post-edit: 0 hits for "drifting field", bare "drift map(s)", or bare "phase map(s)" outside the canonical form.
 
 - [x] **4. Clarify the role of adaptive sampling.** Shicheng wants ASS framed clearly as an extension or future direction; his concern was that its role relative to the main contribution wasn't clear.
 
