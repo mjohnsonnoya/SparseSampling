@@ -228,12 +228,20 @@ Shicheng's review focuses on three major axes: clarity of the drift correction m
     **Response:** Section swap done; deeper Methods restructure deferred.
     **Location in revised draft:** Overleaf commits `1b1c9c6` (section swap), `c79192c` (Outline cleanup).
 
-- [ ] **3. Expand discussion of results and interpretation.** Shicheng asks: what does 75% SNR recovery imply in practical experimental terms? Under what conditions does the method perform best or struggle? How should one think about the trade-off between sampling rate and accuracy?
+- [x] **3. Expand discussion of results and interpretation.** Shicheng asks: what does 75% SNR recovery imply in practical experimental terms? Under what conditions does the method perform best or struggle? How should one think about the trade-off between sampling rate and accuracy?
 
-    **Status (open):** distinct from Abby comment #3 (which was about *attaching numerical SNR to each iteration*). Shicheng wants *narrative interpretation*: practical meaning of 75%, regime of best applicability, sampling-rate vs accuracy trade-off discussion. None of these are currently in the Discussion section.
+    **Response:** Added three new `\ptitle`-labeled paragraphs to the Discussion section, one per sub-question, between "How our data is different" and "Limitations: materials". Three-paragraph structure (rather than one combined paragraph) was chosen to match the Discussion's existing rhythm of focused topics and to give each TBD/TODO a clean home.
 
-    **Response:** Open. A future revision pass should add 1–2 paragraphs to the Discussion: (i) interpreting 75% SNR practically (e.g., "this allows 12-hour acquisitions instead of 2.5 days while preserving QPI features at the dispersion-relevant wavevectors"), (ii) naming the regimes where the method works best (e.g., "drift speeds up to X nm/hour, sparsity rates ≥ 25% for BSCCO-like materials"), (iii) discussing the trade-off curve visible in Fig. 6.
-    **Location in revised draft:** N/A (open TODO).
+    1. **\ptitle{Practical significance of the 75% SNR recovery}.** Anchored in QPI's motivation (investigating electronic band structure): the QPI scattering wavevectors and their dispersion with bias remain resolvable at 75% SNR while acquisition time drops from approximately 2.5 days to 12 hours. Concrete claim, no TBD.
+    2. **\ptitle{Where the compressed sensing reconstruction performs best}.** Scoped narrowly to the CS reconstruction step (per Marcos's request): best when QPI signal is sparse in Fourier space and not dominated by measurement noise. Concrete claim, no TBD.
+    3. **\ptitle{Sampling rate vs reconstruction accuracy}.** Qualitative claim (SNR generally rises monotonically with sampling rate; diminishing returns expected at high rates) anchored to Fig.~\ref{fig:SNR_vs_Sparsity}. Quantitative claim about *where* the elbow occurs is deferred to future work with CeBi data via inline `% TODO (Marcos, Shicheng peer review)` comment. Marcos added "generally" to soften "rises monotonically" before commit.
+
+    **Location in revised draft:**
+    - `paper/main.tex` lines 223, 225, 227 (three new paragraphs); line 228 (Wave 2 TODO).
+    - Overleaf commit: `df7ea6b`.
+
+    **Open hook for Wave 2 (CeBi notebook work):**
+    - LaTeX `% TODO (Marcos, Shicheng peer review)` at line 228 marks where the quantitative elbow position will slot in once the CeBi SNR-vs-sampling-rate data is computed. Hook integrates with the broader CeBi notebook TODOs from Abby comment #3.
 
 ### Minor comments
 
