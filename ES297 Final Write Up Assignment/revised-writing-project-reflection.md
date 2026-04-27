@@ -211,13 +211,28 @@ Shicheng's review focuses on three major axes: clarity of the drift correction m
 
 ### Major comments
 
-- [ ] **1. Strengthen the explanation of the drift correction method.** Shicheng asks for (a) a more concrete description of how drift phase maps are obtained from topography, (b) a clearer step-by-step description of how correction is applied, and (c) an explicit schematic / conceptual workflow figure.
+- [x] **1. Strengthen the explanation of the drift correction method.** Shicheng asks for (a) a more concrete description of how drift phase maps are obtained from topography, (b) a clearer step-by-step description of how correction is applied, and (c) an explicit schematic / conceptual workflow figure.
 
-    **Status (partially addressed):** the Intro now correctly attributes the drift-correction algorithm to Lawler–Fujita with citation `LawlerNature2010` (commit `894b3f9`), so the "what algorithm we use" is clear. The step-by-step "how to compute drift phase maps from topography" remains a TODO; Fig. 4 (`fig:drift_pedagogical`) is referenced as a placeholder for the schematic Shicheng asks for, but the actual figure is "in preparation" per its caption.
+    **Response:** Addressed via the **visual contribution route** rather than expanded body-text exposition. The Lawler–Fujita drift correction algorithm is described in detail in the foundational papers (Lawler 2010, Hamidian 2012); reproducing that level of detail in body text would be redundant. Instead, the paper now presents the algorithm visually through a 12-panel 1D walkthrough that already existed in the source (`fig:drift_correction_1d`) but was orphaned at the end of the appendix and unreferenced from body text. Five concrete actions (commit `d6d27da`):
 
-    **Response:** The schematic is already on Marcos's TODO list (Fig. 4 placeholder). The step-by-step body-text description is a moderate-cost addition for a future revision pass; not done in this peer-review cycle.
+    1. **Added `HamidianNJP2012`** to `paper/refs.bib` (Hamidian et al., New J. Phys. 14, 053017, 2012; DOI 10.1088/1367-2630/14/5/053017) so we can co-cite Lawler and Hamidian when introducing the algorithm.
+    2. **Deleted the stale Fig. 4 placeholder** (`fig:drift_pedagogical`). Its caption was *"[Figure in preparation]"* and dated to before Marcos's PI-discussion-driven breakthrough on what the drift figure should actually show.
+    3. **Moved the 12-panel 1D walkthrough figure** (`fig:drift_correction_1d`) from the end-of-appendix orphan position into the Methods § Drift Correction subsection, adjacent to the body text that introduces drift correction. The figure now has a strengthened caption title (`\textbf{Visual workflow of the Lawler–Fujita drift correction algorithm on a 1D toy example.}`).
+    4. **Updated the Outline reference at line 88** from `\ref{fig:drift_pedagogical}` to `\ref{fig:drift_correction_1d}` so the Outline's promised drift-correction figure now points at the figure that actually exists.
+    5. **Added a body-text sentence** in the Drift Correction subsection: *"We use the Lawler–Fujita drift correction algorithm \cite{LawlerNature2010, HamidianNJP2012}; the workflow is illustrated visually in Fig.~\ref{fig:drift_correction_1d} for a 1D toy example."* Single sentence; full step-by-step lives in the figure.
 
-    **Location in revised draft:** N/A (deferred). The Fig. 4 placeholder caption itself is Marcos's existing reminder.
+    **Hidden insight:** Shicheng's #1c (explicit schematic) was already 90% solved by an existing figure that wasn't being surfaced. The Fig. 4 / Fig. 8 split was a revision-time accumulation: an early placeholder (Fig. 4) survived in body-text references even after the more developed figure (Fig. 8) was added separately at the end of the appendix. Deleting Fig. 4 and surfacing Fig. 8 in its place addressed the comment without writing significant new prose.
+
+    **Bonus cleanups during the move:**
+    - Replaced two em dashes in the caption with commas (per `feedback_no_em_dashes` memory).
+    - Added inline `\cite{HamidianNJP2012}` where the caption references *"Hamidian Eqs.~(1a)/(1b)"*.
+
+    **Location in revised draft:**
+    - `paper/main.tex` line 88 (Outline reference updated).
+    - `paper/main.tex` line 124 (new body-text sentence in Drift Correction subsection).
+    - `paper/main.tex` lines 126–131 (Fig. 8 moved into Methods § Drift Correction).
+    - `paper/refs.bib` line 36 (new `HamidianNJP2012` entry).
+    - Overleaf commit: `d6d27da`.
 
 - [x] **2. Improve organization and flow.** Shicheng cited (a) Discussion before Results, (b) methodological explanations spread across multiple sections, (c) repeated drift motivation. Asked for the standard Intro → Methods → Results → Discussion structure.
 
