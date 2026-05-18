@@ -25,16 +25,6 @@ Reproducibility:
 
 Geometry is frozen in GEOM_LOCKED, chosen on the GROUND-TRUTH FT to trace
 the visible diamond ridge -- NOT tuned to maximize SNR. GT CeBi SNR ~ 4.08.
-
-Known limitations (open for review -- Richard, eyes here):
-  - "Noise" is sampled only ~CUT_OUTER px (~5) beyond the contour, i.e.
-    close to the ridge, not in the far-field background. If the diamond
-    has tails this deflates SNR; widening the noise standoff is worth a look.
-  - n=36 perimeter samples; robustness to the hand-set geometry is not yet
-    quantified (figures/cebi_snr_sensitivity.py scaffolds the +/-20% study).
-  - Validated only on the GT map at one bias. Whether this metric actually
-    tracks reconstruction quality is the job of the Pass-2 sweep
-    (figures/cebi_ass_vs_uniform_snr.py), which is not yet run.
 """
 import numpy as np
 import matplotlib
@@ -46,12 +36,8 @@ import stmpy
 st = stmpy.tools
 
 CEBI = "data/2019-07-11-002 LIY local corr new.spy"
-CEBI_BRAGG = np.array([[66, 170], [169, 178], [80, 70], [182, 80]])  # stale for liy
 
-# ===================== >>> EDIT THIS BLOCK <<< =====================
 # Superellipse that roughly traces the signal ridge (cyan in the overlay).
-# Exact placement is NOT critical -- the per-cut max search finds the true
-# ridge. Just get it into the neighbourhood of the diamond.
 CX, CY = None, None      # None -> auto: geometric center of the loaded FT
 A,  B  = 25.0, 25.0      # half-axes (pixels)
 P      = 1.0             # exponent: 1=diamond, 2=ellipse, >2=box
@@ -62,30 +48,16 @@ CUT_INNER = 5.0         # how far each cut reaches INWARD from the contour (px)
 CUT_OUTER = 5.0         # how far each cut reaches OUTWARD (px) -> noise end
 N_PROFILE = 70           # samples along each perpendicular cut
 SIGNAL_HALFWIDTH = 2.0   # search the ridge max ONLY within +/- this many px of
-                         # the contour (orange band) -> can't grab Bragg/blob
-                         # farther out along the normal
+                         # the contour (orange band) -> can't grab a bright
+                         # off-ridge feature farther out along the normal
 NOISE_EDGE_FRAC = 0.15   # fraction at the OUTWARD end averaged as that cut's noise
-
-EXCLUDE_BRAGG_RADIUS = 0  # if >0, drop a cut whose max lands within this of a
-                          # CEBI_BRAGG peak (those coords are stale for liy --
-                          # leave 0 until we refit Bragg on the liy FT)
 
 SHOW_CUTS_EVERY = 2      # draw every Nth cut in the overlay (visual only)
 OVERLAY_ALPHA   = 0.9
-# ===================================================================
-
-# --- Locked geometry (Pass 1): the EDIT-block values, frozen + documented ---
-# Chosen BY HAND on the GROUND-TRUTH FT to trace the visible diamond ridge.
-# It was NOT selected to maximize SNR or the ASS-vs-uniform gain -- doing that
-# would be metric-hacking. It is held FIXED, identically, for every downstream
-# comparison (GT / uniform / adaptive); geometry is never re-fit per
-# reconstruction. The disclosed, reproducible defense of this manual choice is
-# the sensitivity study (figures/cebi_snr_sensitivity.py), which reports how
-# little GT SNR moves under +/-20% perturbation of these values.
 GEOM_LOCKED = dict(
     cx=None, cy=None, a=25.0, b=25.0, p=1.0, theta=0.0,
     n_samples=36, cut_inner=5.0, cut_outer=5.0, n_profile=70,
-    signal_halfwidth=2.0, noise_edge_frac=0.15, exclude_bragg_radius=0,
+    signal_halfwidth=2.0, noise_edge_frac=0.15,
 )
 
 
@@ -122,15 +94,14 @@ def cebi_snr(ft_2d, geom=None, return_debug=False):
     """SNR = mean(perpendicular-cut maxima) / mean(outer-edge noise).
 
     geom : optional dict overriding any of cx,cy,a,b,p,theta,n_samples,
-    cut_inner,cut_outer,n_profile,signal_halfwidth,noise_edge_frac,
-    exclude_bragg_radius. When None, the module-level EDIT-block globals are
-    used, so a manual run is byte-identical to before this refactor.
+    cut_inner,cut_outer,n_profile,signal_halfwidth,noise_edge_frac. When
+    None, the module-level EDIT-block globals are used, so a manual run is
+    byte-identical to before this refactor.
     """
     g = dict(cx=CX, cy=CY, a=A, b=B, p=P, theta=THETA,
              n_samples=N_SAMPLES, cut_inner=CUT_INNER, cut_outer=CUT_OUTER,
              n_profile=N_PROFILE, signal_halfwidth=SIGNAL_HALFWIDTH,
-             noise_edge_frac=NOISE_EDGE_FRAC,
-             exclude_bragg_radius=EXCLUDE_BRAGG_RADIUS)
+             noise_edge_frac=NOISE_EDGE_FRAC)
     if geom:
         g.update(geom)
     H, W = ft_2d.shape
@@ -151,11 +122,6 @@ def cebi_snr(ft_2d, geom=None, return_debug=False):
         prof = map_coordinates(ft_2d, [ys, xs], order=1, mode="nearest")
         # windowed max: search the ridge ONLY within +/- signal_halfwidth
         imax = int(np.argmax(np.where(win, prof, -np.inf)))
-        if g["exclude_bragg_radius"] > 0:
-            mx, my = xs[imax], ys[imax]
-            if np.any(np.sum((CEBI_BRAGG - [mx, my]) ** 2, axis=1)
-                      <= g["exclude_bragg_radius"] ** 2):
-                continue
         sig.append(prof[imax])
         noi.append(prof[-n_edge:].mean())
         dbg.append((xs, ys, imax, win))
