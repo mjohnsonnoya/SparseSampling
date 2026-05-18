@@ -33,3 +33,6 @@ __pycache__/
 
 # Overleaf clone (its own git repo)
 paper/
+
+# Course deliverable, not part of the shared codebase
+ES297 Final Write Up Assignment/
