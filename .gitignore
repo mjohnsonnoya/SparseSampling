@@ -30,3 +30,6 @@ __pycache__/
 
 # Claude local settings
 .claude/
+
+# Overleaf clone (its own git repo)
+paper/
