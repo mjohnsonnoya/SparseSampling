@@ -5,26 +5,47 @@ Marcos's method (2026-05-15):
     It does NOT need to be exact -- it just has to be near the ridge.
   - Walk along that contour. At many points around it, shoot a line
     PERPENDICULAR (normal) to the contour, crossing the ridge.
-  - On each perpendicular cut: max  -> a SIGNAL sample (snaps to the true
-    ridge even if the superellipse guess is off); outermost end -> a NOISE
-    sample (dark whitespace far outside the diamond).
-  - SNR = mean(signal maxima) / mean(outer-edge noise).
+  - On each perpendicular cut: the ridge band (|s| <= SIGNAL_HALFWIDTH)
+    gives a SIGNAL sample; the outermost end -> a NOISE sample (dark
+    whitespace just outside the diamond).
+  - SNR = mean(signal samples) / mean(outer-edge noise).
+
+Signal statistic (`signal_stat`, 2026-10-11, decided with Marcos):
+  "mean" (DEFAULT) -- mean intensity within the ridge band. This is Jenny's
+          2026-04-06 sketch (sum along the ridge line / sum along a parallel
+          off-ridge line, identical lines on GT, uniform and adaptive),
+          taken around the whole diamond instead of one boxed arm. Unbiased
+          between a smooth full-grid ridge and a speckled reconstruction.
+  "max"  -- the May 2026 statistic: windowed max within the band (snaps to
+          the ridge if the contour is slightly off). The max of noisy samples
+          grows with the noise level, so it flatters speckled reconstructions;
+          kept for reproducibility of the May number (GT SNR 4.08), not used
+          for the manuscript sweep.
 
 The inner "filled" blob is excluded simply by not letting cuts reach
 inward that far (CUT_INNER), so no separate inner mask is needed.
 
-Run:    .venv/bin/python figures/cebi_snr_contour_playground.py
-Output: figures/cebi_snr_contour_overlay.png   (contour + cuts + picks)
+Run:    .venv/bin/python figures/in_progress/cebi_snr_contour_playground.py
+Output: figures/out/cebi_snr_contour_overlay.png   (contour + cuts + picks)
         + printed SNR on this ground-truth map (sanity: should be >> 1).
 
 Reproducibility:
   Needs the CeBi dataset `data/2019-07-11-002 LIY local corr new.spy`
   (NOT in the repo -- ask Marcos/Richard). Deps: hoffmanstmpy, spgl1,
   scipy, numpy, matplotlib.
-  Run: .venv/bin/python figures/cebi_snr_contour_playground.py
+  Run: .venv/bin/python figures/in_progress/cebi_snr_contour_playground.py
 
 Geometry is frozen in GEOM_LOCKED, chosen on the GROUND-TRUTH FT to trace
-the visible diamond ridge -- NOT tuned to maximize SNR. GT CeBi SNR ~ 4.08.
+the visible diamond ridge -- NOT tuned to maximize SNR. GT CeBi SNR: 2.49
+with the ridge-band mean (default), 4.08 with the May windowed max.
+
+MANUSCRIPT USE (2026-10-11): the ratio this script prints divides by the
+map's OWN outer band. For a basis-pursuit reconstruction that band measures
+the solver's sparsity, not noise, so the sweep in cebi_ass_vs_uniform_snr.py
+reports signal(rec) / signal(GT) instead (= SNR with the full-grid noise
+floor as the common denominator). This script stays the home of the
+geometry and the band extraction; use cebi_snr(..., return_debug=True) to
+get the per-cut signal and noise arrays.
 """
 import numpy as np
 import matplotlib
@@ -90,14 +111,17 @@ def superellipse_perimeter(n, a, b, p, theta_deg, cx, cy):
     return pts, nrm
 
 
-def cebi_snr(ft_2d, geom=None, return_debug=False):
-    """SNR = mean(perpendicular-cut maxima) / mean(outer-edge noise).
+def cebi_snr(ft_2d, geom=None, return_debug=False, signal_stat="mean"):
+    """SNR = mean(per-cut ridge signal) / mean(outer-edge noise).
 
     geom : optional dict overriding any of cx,cy,a,b,p,theta,n_samples,
     cut_inner,cut_outer,n_profile,signal_halfwidth,noise_edge_frac. When
-    None, the module-level EDIT-block globals are used, so a manual run is
-    byte-identical to before this refactor.
+    None, the module-level EDIT-block globals are used.
+    signal_stat : "mean" (ridge-band mean, Jenny's sum ratio; default) or
+    "max" (May 2026 windowed max). See the module docstring.
     """
+    if signal_stat not in ("mean", "max"):
+        raise ValueError(f"signal_stat must be 'mean' or 'max', got {signal_stat!r}")
     g = dict(cx=CX, cy=CY, a=A, b=B, p=P, theta=THETA,
              n_samples=N_SAMPLES, cut_inner=CUT_INNER, cut_outer=CUT_OUTER,
              n_profile=N_PROFILE, signal_halfwidth=SIGNAL_HALFWIDTH,
@@ -120,9 +144,10 @@ def cebi_snr(ft_2d, geom=None, return_debug=False):
         xs = px + s * nx
         ys = py + s * ny
         prof = map_coordinates(ft_2d, [ys, xs], order=1, mode="nearest")
-        # windowed max: search the ridge ONLY within +/- signal_halfwidth
-        imax = int(np.argmax(np.where(win, prof, -np.inf)))
-        sig.append(prof[imax])
+        # ridge band only (|s| <= signal_halfwidth): a bright off-ridge
+        # feature farther along the normal can never be counted as signal
+        imax = int(np.argmax(np.where(win, prof, -np.inf)))   # overlay marker
+        sig.append(prof[imax] if signal_stat == "max" else prof[win].mean())
         noi.append(prof[-n_edge:].mean())
         dbg.append((xs, ys, imax, win))
     sig, noi = np.array(sig), np.array(noi)
@@ -161,11 +186,13 @@ def draw_overlay(ft_2d, pts, dbg, snr, path):
 if __name__ == "__main__":
     ft = load_cebi_ft()
     snr, pts, dbg, sig, noi = cebi_snr(ft, return_debug=True)
-    out = "figures/cebi_snr_contour_overlay.png"
+    snr_max = cebi_snr(ft, signal_stat="max")
+    out = "figures/out/cebi_snr_contour_overlay.png"
     draw_overlay(ft, pts, dbg, snr, out)
-    print(f"cuts used        = {len(sig)} / {N_SAMPLES}")
-    print(f"signal (cut max) : mean {sig.mean():.4g}  min {sig.min():.4g}  "
+    print(f"cuts used          = {len(sig)} / {N_SAMPLES}")
+    print(f"signal (band mean) : mean {sig.mean():.4g}  min {sig.min():.4g}  "
           f"max {sig.max():.4g}")
-    print(f"noise (outer end): mean {noi.mean():.4g}")
-    print(f"GT CeBi SNR      = {snr:.4f}   (sanity: should be >> 1)")
+    print(f"noise (outer end)  : mean {noi.mean():.4g}")
+    print(f"GT CeBi SNR (mean) = {snr:.4f}   (sanity: should be >> 1)")
+    print(f"GT CeBi SNR (max)  = {snr_max:.4f}   (May 2026 statistic, was 4.0831)")
     print(f"overlay -> {out}")

@@ -1,0 +1,35 @@
+% Proposed replacement for the Fig. 2 block in paper/main.tex (currently at
+% lines 171-183, the \begin{figure*} that includes fig_drift_correction_1d.pdf).
+%
+% Two changes relative to the live block:
+%   1. \includegraphics target -> fig2_drift_correction_4x4.pdf
+%   2. caption extended for the two new panels (k), (l); the old (k), (l)
+%      sentence is relettered to (m,n).
+%
+% SUPERSEDED 2026-09-12 by fig2_caption_condensed.tex (eight-panel figure).
+% Was applied to paper/main.tex and pushed on 2026-09-07.
+% This file is the working copy for further caption edits; re-apply the
+% figure* block below to main.tex (after `git pull --rebase` in paper/) when
+% it changes.
+%
+% Caption fragments for (k) and (l) are the ones carried in the CAPTION
+% strings of fig2_nudft_resampling_panel.py and fig2_inverse_fft_panel.py,
+% merged and relettered. Conceptual level only: no resampling operator is
+% named, per the 2026-08-09 decision.
+
+\begin{figure*}[tbp]
+    \centering
+    \includegraphics[width=\textwidth]{fig2_drift_correction_4x4.pdf}
+    \caption{\textbf{Lawler--Fujita drift correction in a one-dimensional toy model.}
+    (a) An ideal lattice signal $A(r')=\cos(kr')$ with period $d=2$~nm.
+    (b) A nonlinear displacement field $u(r)=\ln(r+1)/k$.
+    (c) The measured signal $A(r)=\cos[k(r+u(r))]$ is compressed where the drift changes rapidly; dots mark the lattice sites of the ideal (gray) and measured (orange) signals.
+    (d) The drift broadens the Fourier peak.
+    (e,f) Multiplication by $\cos(kr)$ and $\sin(kr)$ separates a slowly varying drift phase from fast $2k$ oscillations.
+    (g,h) Low-pass filtering isolates the slow quadrature components.
+    (i,j) Phase unwrapping recovers the drift phase and displacement field. Deviations within about 1~nm of the left edge in (g) to (j), and the flat segment near $r=0$ in (m), are boundary effects: the low-pass filter and the remap have no data beyond the edge, and the drift changes fastest there.
+    (k) A single Fourier mode $\cos(qr)$, shown at the lattice wavevector $q=k$. The stems mark the mode's value at each sample's assigned position, i.e. the Fourier weight that sample carries in the sum for the coefficient $x_q$: a standard FFT pairs the measurement $y_n$ with the grid position $r_n$ (orange), while drift correction pairs the same $y_n$ with the corrected position $\tilde{r}_n = r_n + u(r_n)$ (blue), where the tilde marks a corrected quantity throughout; gray lines connect the two assignments of the same sample. The same measured value $y_n$ therefore multiplies the orange mode value in the uncorrected sum $x_q=\sum_n y_n\,e^{-iq r_n}$ and the blue mode value in the corrected sum $\tilde{x}_q=\sum_n y_n\,e^{-iq \tilde{r}_n}$, at the same frequencies $q$.
+    (l) The corrected coefficients $\tilde{x}_q$ occupy the same uniform frequency grid as an ordinary FFT, so the standard inverse transform $F^{-1}$ evaluates the corrected map back on the uniform grid. Blue circles: the measured values $y_n$ registered at their corrected positions $\tilde{r}_n$ (in this single-mode illustration they trace the ideal lattice cosine). Open diamonds: the recomputed on-grid values $\tilde{y}_n = F^{-1}\tilde{x}$ evaluated at $r_n$; each is a sum over all samples rather than a moved copy of any single measurement, so no sample-to-sample connectors are drawn. In (k) and (l) only a subset of the full-grid sample positions is drawn for clarity.
+    (m,n) Remapping the distorted signal by the recovered displacement restores the lattice periodicity and sharpens the Fourier peak.}
+    \label{fig:drift_correction_1d}
+\end{figure*}

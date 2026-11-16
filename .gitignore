@@ -34,5 +34,20 @@ __pycache__/
 # Overleaf clone (its own git repo)
 paper/
 
+# Richard's Overleaf revision copy (separate bridge, its own git repo)
+paper-richard/
+
 # Course deliverable, not part of the shared codebase
 ES297 Final Write Up Assignment/
+
+# Local task tracker / session handoff (personal, not for the shared repo)
+revision-tracker/
+
+# Everything the figure scripts generate: PDFs, PNGs and the gate's renders
+figures/out/
+
+# Kept on disk beside obsolete figure code, not in git: old renders and large binaries
+figures/obsolete/outputs/
+figures/obsolete/ASS_pipeline_panels/
+figures/obsolete/rebuild_check/*.npz
+figures/obsolete/rebuild_check/*.png
